@@ -14,9 +14,31 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   useEffect(() => {
     if (isOpen) {
       document?.getElementById("my_modal_1")?.showModal();
+      setTimerActive(true);
+      setTimeLeft(59);
+    } else {
+      setTimerActive(false);
     }
   }, [isOpen]);
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
+  const [timeLeft, setTimeLeft] = useState<number>(59); // Countdown timer starting at 59 seconds
+  const [timerActive, setTimerActive] = useState<boolean>(false);
+  
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+
+    if (timerActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      setTimerActive(false);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [timerActive, timeLeft]);
   const handleOtpChange = (
     event: ChangeEvent<HTMLInputElement>,
     index: number
@@ -36,11 +58,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       }
     }
   };
+  const handleRequestNewOtp = () => {
+    // onRequestNewOtp();
+    // Reset timer
+    setTimeLeft(59);
+    setTimerActive(true);
+  };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     // console.log("OTP submitted:", otp.join(""));
-    // Handle OTP submission logic
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">
@@ -63,18 +90,40 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             />
           ))}
         </div>
-          {
-            otp.length===4 && <div className="flex justify-center">
-            <button onClick={handleSubmit} className="btn btn-success text-white w-full">
-                Submit
+        <div className="mb-4">
+          <p className="text-sm">
+            {timerActive
+              ? `Resend OTP in ${timeLeft}s`
+              : "You can request a new OTP now."}
+          </p>
+        </div>
+        {otp.length === 4 && (
+          <div className="flex justify-center">
+            <div>
+            {!timerActive && (
+              <button type="button" onClick={handleRequestNewOtp} className="btn w-full mb-3">
+                Request New OTP
               </button>
+            )}
+            <button
+              onClick={handleSubmit}
+              className="btn btn-success text-white w-full"
+            >
+              Submit
+            </button>
             </div>
-          }
-          
+          </div>
+        )}
+
         <div className="modal-action">
-           <form method="dialog"> 
-           <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-           </form> 
+          <form method="dialog">
+            <button
+              onClick={onClose}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+          </form>
         </div>
       </div>
     </dialog>,

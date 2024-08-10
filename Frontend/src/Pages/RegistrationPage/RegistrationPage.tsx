@@ -86,7 +86,7 @@ const RegistrationPage = () => {
                     // setFileName(e.target.files[0].name)
                   }}
                 />
-                <Modal isOpen={isModalOpen} onClose={closeModal}></Modal>
+                <Modal isOpen={isModalOpen} onClose={closeModal} children={undefined}></Modal>
               </div>
               <div>
                 <button
