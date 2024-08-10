@@ -5,35 +5,35 @@ import React, { useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 
 const Navbar = () => {
-    const [cartItems,setCartItems] = useState([2,31,4,12,2])
-    const navOptions = (
-        <>
-          <li>
-            <Link href='/menu'>Menu</Link>
-          </li>
-          <li>
-            <Link href='/order/Salad'>Order</Link>
-          </li>
-          <li>
-            <Link href='/secret'>Secret</Link>
-          </li>
-          {/* {
+  const [cartItems, setCartItems] = useState([2, 31, 4, 12, 2]);
+  const navOptions = (
+    <>
+      <li>
+        <Link href="/menu">Menu</Link>
+      </li>
+      <li>
+        <Link href="/order/Salad">Order</Link>
+      </li>
+      <li>
+        <Link href="/secret">Secret</Link>
+      </li>
+      {/* {
             user?.role==="admin" && <li>
             <Link href='/dashboard/all-user'>Admin</Link>
           </li>
           } */}
-          <li>
-            <Link href='/dashboard/cart'>
-              {/* <button className='btn'> */}
-              <BsCart3 />
-                <div className='badge badge-secondary'>+{cartItems?.length}</div>
-              {/* </button> */}
-            </Link>
-          </li>
-          <li>
-              <Link href='/login'>Login</Link>
-            </li>
-          {/* {user?.email ? (
+      <li>
+        <Link href="/dashboard/cart">
+          {/* <button className='btn'> */}
+          <BsCart3 />
+          <div className="badge badge-secondary">+{cartItems?.length}</div>
+          {/* </button> */}
+        </Link>
+      </li>
+      <li>
+        <Link href="/login">Login</Link>
+      </li>
+      {/* {user?.email ? (
             <li onClick={() => dispatch(logOut())}>
               <Link>Logout</Link>
             </li>
@@ -42,8 +42,8 @@ const Navbar = () => {
               <Link href='/login'>Login</Link>
             </li>
           )} */}
-        </>
-      )
+    </>
+  );
   return (
     <div className="navbar max-w-screen-xl z-10 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">
@@ -71,18 +71,15 @@ const Navbar = () => {
             {navOptions}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">
-            <Link href={"/"}>MedHome</Link>
-        </a>
+
+        <Link className="btn btn-ghost text-xl" href={"/"}>
+          MedHome
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navOptions}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navOptions}</ul>
       </div>
-      <div className="navbar-end">
-        {/* <a className="btn">Button</a> */}
-      </div>
+      <div className="navbar-end">{/* <a className="btn">Button</a> */}</div>
     </div>
   );
 };
