@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Paracetamol",
+        "slug": "paracetamol",
+        "photos": [
+            "https://example.com/images/paracetamol1.jpg",
+            "https://example.com/images/paracetamol2.jpg"
+        ],
+        "description": "Effective pain and fever relief.",
+        "metaKey": "paracetamol, pain relief, fever reducer",
+        "price": 5.00,
+        "discount": 0.50,
+        "stockStatus": false,
+        "status": "active",
+        "categories": ["Pain Relief"],
+        "variants": [
+            {
+                "name": "500mg",
+                "price": 5.00
+            },
+            {
+                "name": "1000mg",
+                "price": 8.00
+            }
+        ]
+    },
+    {
+        "name": "Vitamin C",
+        "slug": "vitamin-c",
+        "photos": [
+            "https://example.com/images/vitamin-c1.jpg",
+            "https://example.com/images/vitamin-c2.jpg"
+        ],
+        "description": "Immune support with daily Vitamin C.",
+        "metaKey": "vitamin c, immune support, supplements",
+        "price": 10.00,
+        "discount": 1.00,
+        "stockStatus": true,
+        "status": "active",
+        "categories": ["Vitamins & Supplements"],
+        "variants": [
+            {
+                "name": "100mg",
+                "price": 10.00
+            },
+            {
+                "name": "500mg",
+                "price": 15.00
+            }
+        ]
+    }
+]

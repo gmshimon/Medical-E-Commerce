@@ -9,13 +9,10 @@ const Navbar = () => {
   const navOptions = (
     <>
       <li>
-        <Link href="/menu">Menu</Link>
+        <Link href="/product">Product</Link>
       </li>
       <li>
         <Link href="/order/Salad">Order</Link>
-      </li>
-      <li>
-        <Link href="/secret">Secret</Link>
       </li>
       {/* {
             user?.role==="admin" && <li>
