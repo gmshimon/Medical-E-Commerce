@@ -1,5 +1,6 @@
 "Use Client";
 "use client";
+import Modal from "@/Components/Modal/Modal";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
@@ -9,16 +10,23 @@ const RegistrationPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
   function handSubmitForm(event: FormEvent<HTMLFormElement>): void {
+    openModal()
     event.preventDefault();
     // Collect form data
     const formData = {
       name,
       email,
       password,
+      file
     };
 
-    console.log(file);
+    console.log(formData);
   }
 
   return (
@@ -75,9 +83,10 @@ const RegistrationPage = () => {
                   className="file-input file-input-bordered w-full max-w-xs"
                   onChange={e=>{
                     setFile(e.target.files[0])
-                    setFileName(e.target.files[0].name)
+                    // setFileName(e.target.files[0].name)
                   }}
                 />
+                <Modal isOpen={isModalOpen} onClose={closeModal}></Modal>
               </div>
               <div>
                 <button
