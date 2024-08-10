@@ -1,21 +1,24 @@
-"Use Client"
-"use client"
+"Use Client";
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
-
-const LoginPage = () => {
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+const RegistrationPage = () => {
+  const [email, setEmail] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   function handSubmitForm(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-     // Collect form data
-     const formData = {
-        email,
-        password,
-      };
-  
-      console.log(formData);
+    // Collect form data
+    const formData = {
+      name,
+      email,
+      password,
+    };
+
+    console.log(file);
   }
 
   return (
@@ -33,13 +36,23 @@ const LoginPage = () => {
             />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-center">Login</h1>
+            <h1 className="text-4xl font-bold text-center">Sign Up</h1>
             <form className="pr-5 w-full" onSubmit={handSubmitForm}>
+              <div className="my-4">
+                <label htmlFor="name">Full Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  placeholder="Type Full Name"
+                  className="input input-bordered w-full max-w-xs mt-2"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
               <div className="my-4">
                 <label htmlFor="email">Email</label>
                 <input
                   name="email"
-                  type="text"
+                  type="email"
                   placeholder="Type here"
                   className="input input-bordered w-full max-w-xs mt-2"
                   onChange={(e) => setEmail(e.target.value)}
@@ -55,20 +68,29 @@ const LoginPage = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-
+              <div className="mb-5">
+                <input
+                  type="file"
+                  // accept="image/*"
+                  className="file-input file-input-bordered w-full max-w-xs"
+                  onChange={e=>{
+                    setFile(e.target.files[0])
+                    setFileName(e.target.files[0].name)
+                  }}
+                />
+              </div>
               <div>
                 <button
-                  // disabled={disabled}
                   className="btn btn-warning w-full"
                   type="submit"
                 >
-                  Login
+                  Register
                 </button>
               </div>
               <div className="text-center mt-3 hover:underline underline-offset-2 hover:cursor-pointer">
-                <Link href="/registration">
+                <Link href="/login">
                   <span className="text-orange-400">
-                    New here? Create a New Account
+                    Already have account ? Log in
                   </span>
                 </Link>
               </div>
@@ -80,4 +102,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;
