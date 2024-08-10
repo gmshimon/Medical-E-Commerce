@@ -3,16 +3,16 @@
         "name": "Paracetamol",
         "slug": "paracetamol",
         "photos": [
-            "https://example.com/images/paracetamol1.jpg",
-            "https://example.com/images/paracetamol2.jpg"
+            "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
         ],
         "description": "Effective pain and fever relief.",
         "metaKey": "paracetamol, pain relief, fever reducer",
         "price": 5.00,
         "discount": 0.50,
-        "stockStatus": false,
+        "stockStatus": true,
         "status": "active",
-        "categories": ["Pain Relief"],
+        "categories": "Pain Relief",
         "variants": [
             {
                 "name": "500mg",
@@ -28,8 +28,8 @@
         "name": "Vitamin C",
         "slug": "vitamin-c",
         "photos": [
-            "https://example.com/images/vitamin-c1.jpg",
-            "https://example.com/images/vitamin-c2.jpg"
+            "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
         ],
         "description": "Immune support with daily Vitamin C.",
         "metaKey": "vitamin c, immune support, supplements",
@@ -37,7 +37,7 @@
         "discount": 1.00,
         "stockStatus": true,
         "status": "active",
-        "categories": ["Vitamins & Supplements"],
+        "categories": "Vitamins & Supplements",
         "variants": [
             {
                 "name": "100mg",
@@ -46,6 +46,156 @@
             {
                 "name": "500mg",
                 "price": 15.00
+            }
+        ]
+    },
+    {
+        "name": "Ibuprofen",
+        "slug": "ibuprofen",
+        "photos": [
+            "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Anti-inflammatory pain reliever.",
+        "metaKey": "ibuprofen, anti-inflammatory, pain reliever",
+        "price": 7.00,
+        "discount": 1.00,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Pain Relief",
+        "variants": [
+            {
+                "name": "200mg",
+                "price": 7.00
+            },
+            {
+                "name": "400mg",
+                "price": 12.00
+            }
+        ]
+    },
+    {
+        "name": "Aspirin",
+        "slug": "aspirin",
+        "photos": [
+            "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Used to reduce fever and relieve pain.",
+        "metaKey": "aspirin, fever reducer, pain relief",
+        "price": 6.00,
+        "discount": 0.50,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Pain Relief",
+        "variants": [
+            {
+                "name": "300mg",
+                "price": 6.00
+            },
+            {
+                "name": "500mg",
+                "price": 10.00
+            }
+        ]
+    },
+    {
+        "name": "Omega-3 Fish Oil",
+        "slug": "omega-3-fish-oil",
+        "photos": [
+           "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Supports heart health and joint function.",
+        "metaKey": "omega-3, fish oil, heart health",
+        "price": 15.00,
+        "discount": 2.00,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Vitamins & Supplements",
+        "variants": [
+            {
+                "name": "1000mg",
+                "price": 15.00
+            },
+            {
+                "name": "2000mg",
+                "price": 25.00
+            }
+        ]
+    },
+    {
+        "name": "Calcium Tablets",
+        "slug": "calcium-tablets",
+        "photos": [
+           "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Essential for bone health.",
+        "metaKey": "calcium, bone health, supplements",
+        "price": 12.00,
+        "discount": 1.00,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Vitamins & Supplements",
+        "variants": [
+            {
+                "name": "500mg",
+                "price": 12.00
+            },
+            {
+                "name": "1000mg",
+                "price": 20.00
+            }
+        ]
+    },
+    {
+        "name": "Cough Syrup",
+        "slug": "cough-syrup",
+        "photos": [
+           "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Helps relieve cough and soothe throat irritation.",
+        "metaKey": "cough syrup, throat relief, cough remedy",
+        "price": 8.00,
+        "discount": 1.00,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Cough & Cold",
+        "variants": [
+            {
+                "name": "200ml",
+                "price": 8.00
+            },
+            {
+                "name": "500ml",
+                "price": 15.00
+            }
+        ]
+    },
+    {
+        "name": "Decongestant Nasal Spray",
+        "slug": "decongestant-nasal-spray",
+        "photos": [
+            "https://5.imimg.com/data5/SELLER/Default/2023/3/296382136/BW/JE/ND/28067584/paracetamol-650-mg-tablet-500x500.png",
+            "https://e1.pxfuel.com/desktop-wallpaper/216/227/desktop-wallpaper-stock-of-capsule-close-up-head-ache-paracetamol.jpg"
+        ],
+        "description": "Provides relief from nasal congestion.",
+        "metaKey": "nasal spray, decongestant, sinus relief",
+        "price": 9.00,
+        "discount": 1.50,
+        "stockStatus": true,
+        "status": "active",
+        "categories": "Cough & Cold",
+        "variants": [
+            {
+                "name": "30ml",
+                "price": 9.00
+            },
+            {
+                "name": "60ml",
+                "price": 16.00
             }
         ]
     }

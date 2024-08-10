@@ -34,7 +34,7 @@ const ProductPage = () => {
           ))}
         </TabList>
         <TabPanel>
-          <Products />
+          <Products CategoryName={""} />
         </TabPanel>
         {categories.map((item) => (
           <TabPanel>Hello</TabPanel>

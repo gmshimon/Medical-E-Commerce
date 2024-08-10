@@ -1,14 +1,9 @@
 "use client";
+import ProductInterface from '@/Interface/product.interface';
 import React, { useEffect, useState } from 'react';
-
-// Define the type for a product
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stockStatus: boolean;
-}
+import ProductModal from '../ProductModal/ProductModal';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Define the type for props
 interface ProductsProps {
@@ -18,8 +13,12 @@ interface ProductsProps {
 // Define the component
 const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
   // Use the type in the state
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductInterface[]>([]);
+  const [singleProduct, setSingleProduct] = useState<ProductInterface>()
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
   useEffect(() => {
     fetch("products.json")
       .then(res => res.json())
@@ -27,15 +26,15 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
       .catch(error => console.error('Error fetching products:', error));
   }, []);
 
-  console.log(CategoryName);
-
   return (
     <div>
+        <ToastContainer />
       <h2 className='text-2xl font-bold text-center mb-4'>{CategoryName}</h2>
       <div className='grid md:grid-cols-3 gap-10'>
         {products.map(item => (
-          <div key={item.id} className='card card-compact bg-base-100 w-96 shadow-xl'>
+          <div key={item.name} className='card card-compact bg-base-100 w-96 shadow-xl'>
             <figure>
+                 {/* TODO: use product image */}
               <img
                 src="https://images.aeonmedia.co/images/afef287f-dd6f-4a6a-b8a6-4f0a09330657/sized-kendal-l4ikccachoc-unsplash.jpg?width=3840&quality=75&format=auto"
                 alt='Product'
@@ -47,14 +46,22 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
             <div className='card-body'>
               <h3 className='card-title text-center'>{item.name}</h3>
               <p>{item.description}</p>
+              <p>Meta Key: {item.metaKey}</p>
               <div className='card-actions justify-center'>
                 <button
                   disabled={!item.stockStatus}
-                  // onClick={handleFoodItem}
+                  onClick={()=>{
+                    openModal()
+                    setSingleProduct(item)
+                    // toast.success("Success Notification !", {
+                    //     position: "top-right",
+                    //   });
+                }}
                   className='btn btn-outline border-0 border-b-4 border-orange-400 mt-4'
                 >
-                  {item.stockStatus ? 'Add to Cart' : 'Stock out'}
+                  {item.stockStatus ? 'Details' : 'Stock out'}
                 </button>
+                <ProductModal isOpen={isModalOpen} onClose={closeModal} children={undefined} product={singleProduct}/>
               </div>
             </div>
           </div>
