@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductModal from "../ProductModal/ProductModal";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { reset } from "@/lib/features/cartSlice";
 
 // Define the type for props
 interface ProductsProps {
@@ -12,10 +15,14 @@ interface ProductsProps {
 
 // Define the component
 const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
+  const { isCartItemAdded } = useSelector((state: RootState) => state.cart);
   // Use the type in the state
   const [products, setProducts] = useState<ProductInterface[]>([]);
-  const [singleProduct, setSingleProduct] = useState<ProductInterface | null>(null);
+  const [singleProduct, setSingleProduct] = useState<ProductInterface | null>(
+    null
+  );
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -26,7 +33,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
         const response = await fetch("/products.json");
         const data: ProductInterface[] = await response.json();
         if (CategoryName) {
-          const filteredProducts = data.filter(product =>
+          const filteredProducts = data.filter((product) =>
             product.categories.includes(CategoryName)
           );
           setProducts(filteredProducts);
@@ -40,10 +47,15 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
 
     fetchProducts();
   }, [CategoryName]);
-
+  if (isCartItemAdded) {
+    toast.success("Item Added!", {
+      position: "top-right",
+    });
+    dispatch(reset());
+  }
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer/>
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
         {products.map((item) => (
@@ -81,9 +93,11 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
                 </button>
                 {singleProduct && (
                   <ProductModal
-                                isOpen={isModalOpen}
-                                onClose={closeModal}
-                                product={singleProduct} children={undefined}                  />
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    product={singleProduct}
+                    children={undefined}
+                  />
                 )}
               </div>
             </div>
