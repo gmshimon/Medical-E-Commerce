@@ -22,7 +22,7 @@ const Navbar = () => {
           </li>
           } */}
       <li>
-        <Link href="/dashboard/cart">
+        <Link href="/cart">
           {/* <button className='btn'> */}
           <BsCart3 />
           <div className="badge badge-secondary">+{carts?.length}</div>

@@ -47,15 +47,15 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
 
     fetchProducts();
   }, [CategoryName]);
-  if (isCartItemAdded) {
-    toast.success("Item Added!", {
-      position: "top-right",
-    });
-    dispatch(reset());
-  }
+  // if (isCartItemAdded) {
+  //   toast.success("Item Added!", {
+  //     position: "top-right",
+  //   });
+  //   dispatch(reset());
+  // }
   return (
     <div>
-      <ToastContainer/>
+      <ToastContainer autoClose={3000}/>
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
         {products.map((item) => (

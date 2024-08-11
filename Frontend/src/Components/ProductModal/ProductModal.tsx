@@ -49,14 +49,14 @@ const ProductModal: React.FC<ModalProps> = ({
   const handleAddCart = () => {
     const productInfo ={
       name: product.name,
-      price: activeVariant?.price || product.price,
+      price: activeVariant?.price - product?.discount || product?.price - product.discount,
+      totalPrice:activeVariant?.price - product?.discount || product?.price - product.discount,
       variant: activeVariant?.name || '',
       description: product.description,
       photos: product.photos,
       quantity: 1
     }
     dispatch(addItems(productInfo))
-    console.log("Product from modal:", productInfo);
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">
@@ -96,6 +96,7 @@ const ProductModal: React.FC<ModalProps> = ({
               <br />
               
               <button
+              disabled={activeVariant?.name?false:true}
                 onClick={handleAddCart}
                 className="btn btn-outline border-0 border-b-4 border-orange-400 mt-4"
               >
