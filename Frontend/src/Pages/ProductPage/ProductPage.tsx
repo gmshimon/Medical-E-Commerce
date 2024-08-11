@@ -37,7 +37,9 @@ const ProductPage = () => {
           <Products CategoryName={""} />
         </TabPanel>
         {categories.map((item) => (
-          <TabPanel>Hello</TabPanel>
+          <TabPanel>
+          <Products CategoryName={item?.name} />
+        </TabPanel>
         ))}
       </Tabs>
     </div>

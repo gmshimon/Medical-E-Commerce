@@ -61,7 +61,9 @@ const ProductModal: React.FC<ModalProps> = ({
             <div>
               <h1 className="text-3xl font-bold">{product.name}</h1>
               <p className="font-bold mt-3 text-2xl text-orange-700">
-                $ {activeVariant?.price || product?.price}
+                $ {activeVariant?.price || product?.price}  {
+                    product?.discount>0 && `-${product?.discount} ( ${activeVariant?.price - product?.discount || product?.price - product.discount} )`
+                } 
               </p>
               <p className="py-6">
                 Provident cupiditate voluptatem et in. Quaerat fugiat ut
