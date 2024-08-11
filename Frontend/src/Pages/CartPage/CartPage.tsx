@@ -20,18 +20,17 @@ const CartPage = () => {
     dispatch(decrementQuantity(item));
   };
 
-  const handlePageChange = (page:number) =>{
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  }
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const cartItems = carts.slice(indexOfFirstItem, indexOfLastItem);
 
-
   return (
     <div className="mt-10">
-      <div className="overflow-x-auto h-[450px]">
+      <div className="overflow-x-auto h-[600px] lg:h-[450px] ">
         <table className="table">
           {/* head */}
           <thead className="bg-orange-600 text-white text-1xl">
@@ -87,7 +86,39 @@ const CartPage = () => {
           </tbody>
         </table>
       </div>
-      <Pagination totalPages={totalPages} currentPage={currentPage} handlePageChange={handlePageChange}/>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        handlePageChange={handlePageChange}
+      />
+
+      <div className="flex justify-center mt-10">
+        <div>
+          <table className="table-auto">
+            <tbody className="text-2xl">
+              <tr>
+                <td className="px-4">Subtotal:</td>
+                <td className="px-4">
+                  ${carts.reduce((acc, curr) => acc + curr.totalPrice, 0)}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4">Shipping:</td>
+                <td className="px-4">$5.00</td>
+              </tr>
+              <tr>
+                <td className="px-4 font-bold">Total:</td>
+                <td className="px-4 font-bold">
+                  ${carts.reduce((acc, curr) => acc + curr.totalPrice, 0) + 5}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="mt-5">
+            <button className="btn btn-primary btn-block">Checkout</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
