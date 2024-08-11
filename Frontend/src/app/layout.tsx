@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/Components/Navbar/Navbar";
 import StoreProvider from "./StoreProvider";
 
-
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,15 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-        <StoreProvider>
     <html lang="en">
       <body className={`${inter.className} max-w-screen-xl mx-auto`}>
+        <StoreProvider>
           <Navbar />
           {children}
-
+        </StoreProvider>
         {/* </Providers> */}
       </body>
     </html>
-        </StoreProvider>
   );
 }

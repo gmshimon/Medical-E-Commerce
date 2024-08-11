@@ -5,6 +5,8 @@ import ProductInterface from "@/Interface/product.interface";
 import { CiShoppingCart } from "react-icons/ci";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { addItems } from "@/lib/features/cartSlice";
 
 interface Variant {
   name: string;
@@ -24,6 +26,7 @@ const ProductModal: React.FC<ModalProps> = ({
   product,
   children,
 }) => {
+  const dispatch = useDispatch()
   if (!isOpen) return null;
 
   useEffect(() => {
@@ -44,7 +47,16 @@ const ProductModal: React.FC<ModalProps> = ({
     // console.log("OTP submitted:", otp.join(""));
   };
   const handleAddCart = () => {
-    console.log("Product from modal:", product);
+    const productInfo ={
+      name: product.name,
+      price: activeVariant?.price || product.price,
+      variant: activeVariant?.name || '',
+      description: product.description,
+      photos: product.photos,
+      quantity: 1
+    }
+    dispatch(addItems(productInfo))
+    console.log("Product from modal:", productInfo);
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">

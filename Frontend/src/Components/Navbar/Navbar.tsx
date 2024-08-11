@@ -3,9 +3,11 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { BsCart3 } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { RootState } from '../../lib/store';
 
 const Navbar = () => {
-  const [cartItems, setCartItems] = useState([2, 31, 4, 12, 2]);
+  const {carts} = useSelector((state:RootState) =>state.cart)
   const navOptions = (
     <>
       <li>
@@ -23,7 +25,7 @@ const Navbar = () => {
         <Link href="/dashboard/cart">
           {/* <button className='btn'> */}
           <BsCart3 />
-          <div className="badge badge-secondary">+{cartItems?.length}</div>
+          <div className="badge badge-secondary">+{carts?.length}</div>
           {/* </button> */}
         </Link>
       </li>
