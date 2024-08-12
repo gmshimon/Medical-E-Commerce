@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "@smastrom/react-rating": "^1.5.0",
+    "axios": "^1.7.3",
     "frontend": "file:",
     "next": "14.2.5",
     "react": "^18",

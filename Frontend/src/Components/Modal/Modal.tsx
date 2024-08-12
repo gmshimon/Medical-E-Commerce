@@ -1,6 +1,9 @@
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../lib/store';
+import { verifyOTP } from "@/lib/features/userSlice";
 
 interface ModalProps {
   isOpen: boolean;
@@ -64,10 +67,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     setTimeLeft(59);
     setTimerActive(true);
   };
-
+  const {email} = useSelector((state: RootState)=>state.user)
+  const dispatch = useDispatch()
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    // console.log("OTP submitted:", otp.join(""));
+    const otpData = {
+      email,
+      otp: otp.join("")
+    }
+    dispatch(verifyOTP(otpData));
+    onClose()
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">
@@ -100,11 +109,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         {otp.length === 4 && (
           <div className="flex justify-center">
             <div>
-            {!timerActive && (
+            {/* {!timerActive && (
               <button type="button" onClick={handleRequestNewOtp} className="btn w-full mb-3">
                 Request New OTP
               </button>
-            )}
+            )} */}
             <button
               onClick={handleSubmit}
               className="btn btn-success text-white w-full"

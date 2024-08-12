@@ -1,9 +1,15 @@
 "Use Client";
 "use client";
 import Modal from "@/Components/Modal/Modal";
+import { registerUser, reset, setisUserVerified } from "@/lib/features/userSlice";
+import { RootState } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+
 const RegistrationPage = () => {
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -11,26 +17,40 @@ const RegistrationPage = () => {
   const [fileName, setFileName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isModalOpen, setModalOpen] = useState(false);
+  const {isUserRegisterSuccess,isUserVerified} = useSelector((state: RootState)=>state.user)
+  const dispatch = useDispatch()
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
+  useEffect(()=>{
+    if(isUserRegisterSuccess){
+      openModal();
+      dispatch(reset())
+    }
+    if(isUserVerified){
+      dispatch(setisUserVerified())
+      toast.success("User verified!");
+    }
+  },[isUserRegisterSuccess,isUserVerified])
+
   function handSubmitForm(event: FormEvent<HTMLFormElement>): void {
-    openModal()
     event.preventDefault();
     // Collect form data
     const formData = {
       name,
       email,
       password,
-      file
+      image:file
     };
+    dispatch(registerUser(formData));
 
     console.log(formData);
   }
 
   return (
     <section className="flex items-center justify-center min-h-screen ">
+      <ToastContainer position="top-right"/>
       <div className="lg:h-[650px] h-full w-full max-w-full rounded-lg shadow-md bg-black text-white">
         <div className="h-full flex flex-col lg:flex-row justify-around items-center">
           <div className="w-full lg:w-1/2">
