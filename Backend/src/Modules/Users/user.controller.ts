@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
+import bcrypt from 'bcrypt';
 import User from './user.model'
 import path from 'path'
 import fs from 'fs'
 import sendOTPEmail from '../../utilis/sendOTP'
+import generateToken from '../../utilis/Token/generateToken';
 
 const deleteImage = file => {
   const filePath = path.join(__dirname, '../../../images/users', file)
@@ -49,4 +51,52 @@ const registerUser = async (
   }
 }
 
-export default { registerUser }
+const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+)=>{
+  try {
+    const {email, pass} = req.body;
+
+    if (!email || !pass) {
+      return res.status(403).json({
+        status: 'Fail',
+        message: 'Please provide credentials'
+      })
+    }
+
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({
+        status: 'Fail',
+        message: 'No user with this email'
+      })
+    }
+
+    const isPasswordValid = bcrypt.compareSync(pass, user.password)
+    if (!isPasswordValid) {
+      return res.status(403).json({
+        status: 'Fail',
+        message: 'Wrong password'
+      })
+    }
+    const {accessToken, refreshToken} = generateToken(user)
+    const { password, ...others } = user.toObject()
+    res.status(200).json({
+      status: 'Success',
+      message: 'Login successful',
+      data: others,
+      accessToken: accessToken,
+      refreshToken: refreshToken
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Failed to login',
+      error: error.message
+    })
+  }
+}
+
+export default { registerUser,loginUser }
