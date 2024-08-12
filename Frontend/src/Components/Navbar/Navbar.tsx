@@ -9,15 +9,18 @@ import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
+  const {user}=useSelector((state:RootState)=>state.user)
   const pathname = usePathname()
   const navOptions = (
     <>
       <li>
         <Link href="/product">Product</Link>
       </li>
-      <li>
+      {user?.role ==='admin' ||user?.role === 'super admin' &&
+        <li>
         <Link href="/admin">Admin</Link>
       </li>
+      }
       <li>
         <Link href="/login">Login</Link>
       </li>
@@ -25,7 +28,7 @@ const Navbar = () => {
   );
   if(pathname==="/admin" || pathname==="/admin/all-user")return null
   return (
-    <div className="navbar max-w-screen-xl z-10 bg-opacity-30 bg-amber-950 text-white">
+    <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -46,7 +49,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content  bg-amber-500 text-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content  bg-amber-500 text-white rounded-box absolute top-full z-60  mt-3 w-52 p-2 shadow"
           >
             {navOptions}
           </ul>
@@ -107,10 +110,11 @@ const Navbar = () => {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img
+              {/* <img
                 alt="Tailwind CSS Navbar component"
                 src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+              /> */}
+              <img src={user?.photo} alt="" />
             </div>
           </div>
           <ul

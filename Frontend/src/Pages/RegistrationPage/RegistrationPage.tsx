@@ -67,40 +67,44 @@ const RegistrationPage = () => {
             <h1 className="text-4xl font-bold text-center">Sign Up</h1>
             <form className="pr-5 w-full" onSubmit={handSubmitForm}>
               <div className="my-4">
-                <label htmlFor="name">Full Name</label>
+                <label htmlFor="name">Full Name *</label>
                 <input
+                required
                   name="name"
                   type="text"
                   placeholder="Type Full Name"
-                  className="input input-bordered w-full max-w-xs mt-2"
+                  className="input input-bordered w-full max-w-xs mt-2 text-black"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="my-4">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email *</label>
                 <input
+                required
                   name="email"
                   type="email"
                   placeholder="Type here"
-                  className="input input-bordered w-full max-w-xs mt-2"
+                  className="input input-bordered w-full max-w-xs mt-2 text-black"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Password *</label>
                 <input
+                required
                   name="password"
                   type="password"
                   placeholder="Enter your password"
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full max-w-xs text-black"
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="mb-5">
                 <input
+                required
                   type="file"
                   // accept="image/*"
-                  className="file-input file-input-bordered w-full max-w-xs"
+                  className="file-input file-input-bordered w-full max-w-xs text-black"
                   onChange={e=>{
                     setFile(e.target.files[0])
                     // setFileName(e.target.files[0].name)

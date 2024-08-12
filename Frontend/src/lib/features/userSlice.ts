@@ -3,29 +3,35 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface CounterState {
   value: number
-  email:string | null
+  email: string | null
   isUserRegisterError: boolean
   isUserRegisterSuccess: boolean
   isUserRegisterLoading: boolean
   isUserVerified: boolean
   isUserVerifiedError: boolean
-  user: {}
+  isLoginError: boolean
+  isLoginSuccess: boolean
+  isLoginPending: boolean
+  user: {} | null
 }
 
 // Define the initial state using that type
 const initialState: CounterState = {
   value: 0,
-  email:null,
+  email: null,
   isUserRegisterError: false,
   isUserRegisterSuccess: false,
   isUserRegisterLoading: false,
   isUserVerified: false,
   isUserVerifiedError: false,
-  user: {}
+  isLoginError: false,
+  isLoginSuccess: false,
+  isLoginPending: false,
+  user: null
 }
 
 export const registerUser = createAsyncThunk('registerUser', async data => {
-  const response = await axiosInstance.post('/user/create-user', data,{
+  const response = await axiosInstance.post('/user/create-user', data, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -34,10 +40,26 @@ export const registerUser = createAsyncThunk('registerUser', async data => {
   return result
 })
 
-export const verifyOTP = createAsyncThunk("verifyOTP",async(data)=>{
-  const response = await axiosInstance.post("otp/verify-otp",data)
-  return response.data
+export const loginUser = createAsyncThunk('loginUser', async data => {
+  const response = await axiosInstance.post('/user/login', data)
+  const result = response.data
+  if (result.data) {
+    const tokenExpiration = new Date().getTime() + 5 * 60 * 60 * 1000
+    localStorage.setItem(
+      'userToken',
+      JSON.stringify({
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        tokenExpiration: tokenExpiration
+      })
+    )
+  }
+  return result.data
+})
 
+export const verifyOTP = createAsyncThunk('verifyOTP', async data => {
+  const response = await axiosInstance.post('otp/verify-otp', data)
+  return response.data
 })
 
 export const counterSlice = createSlice({
@@ -49,7 +71,10 @@ export const counterSlice = createSlice({
       state.isUserRegisterError = false
       state.isUserRegisterSuccess = false
       state.isUserRegisterLoading = false
-      state.isUserVerifiedError= false
+      state.isUserVerifiedError = false
+      state.isLoginError = false
+      state.isLoginSuccess = false
+      state.isLoginPending = false
     },
     increment: state => {
       state.value += 1
@@ -61,30 +86,33 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload
     },
-    setisUserVerified:state=>{
-      state.isUserVerified=false
+    setisUserVerified: state => {
+      state.isUserVerified = false
+    },
+    setUserNull: state => {
+      state.user = null
     }
   },
-  extraReducers:builder=>{
+  extraReducers: builder => {
     builder
-     .addCase(registerUser.pending, (state) => {
+      .addCase(registerUser.pending, state => {
         state.isUserRegisterLoading = true
         state.isUserRegisterError = false
         state.isUserRegisterSuccess = false
       })
-     .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.isUserRegisterLoading = false
         state.isUserRegisterSuccess = true
         state.isUserRegisterError = false
-        state.email=action.payload
+        state.email = action.payload
         console.log(action.payload)
       })
-     .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, state => {
         state.isUserRegisterLoading = false
         state.isUserRegisterError = true
         state.isUserRegisterSuccess = false
       })
-      .addCase(verifyOTP.pending, (state) => {
+      .addCase(verifyOTP.pending, state => {
         state.isUserVerified = false
         state.isUserVerifiedError = false
       })
@@ -92,14 +120,37 @@ export const counterSlice = createSlice({
         state.isUserVerified = true
         state.isUserVerifiedError = false
       })
-      .addCase(verifyOTP.rejected, (state) => {
+      .addCase(verifyOTP.rejected, state => {
         state.isUserVerified = false
         state.isUserVerifiedError = true
+      })
+      .addCase(loginUser.pending, state => {
+        state.isLoginPending = true
+        state.isLoginError = false
+        state.isLoginSuccess = false
+      })
+      .addCase(loginUser.fulfilled, (state,action) => {
+        state.isLoginPending = false
+        state.isLoginError = false
+        state.isLoginSuccess = true
+        state.user = action.payload
+      })
+      .addCase(loginUser.rejected, state => {
+        state.isLoginPending = false
+        state.isLoginError = true
+        state.isLoginSuccess = false
       })
   }
 })
 
-export const { reset,increment, decrement, incrementByAmount ,setisUserVerified} = counterSlice.actions
+export const {
+  reset,
+  increment,
+  decrement,
+  incrementByAmount,
+  setisUserVerified,
+  setUserNull
+} = counterSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectCount = (state: RootState) => state.counter.value
