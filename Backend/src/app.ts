@@ -2,8 +2,11 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import connectDB from './Config/db';
 import path from 'path';
+import dotenv from 'dotenv';
+
 const app: Application = express();
 
+dotenv.config()
 app.use(cors());
 
 //parse

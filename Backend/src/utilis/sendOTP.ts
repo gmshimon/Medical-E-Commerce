@@ -9,8 +9,8 @@ let transporter = nodemailer.createTransport({
       type: 'OAuth2',
       user: 'systematicsquad69@gmail.com',
       pass: '#Kola9696',
-      clientId: '638772769616-bf78l4n0m57lpar5tuhqlrkqb0cr89f3.apps.googleusercontent.com',
-      clientSecret: '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',
+      clientId: process.env.Client_ID,
+      clientSecret: process.env.client_secret,
       refreshToken: '1//04RKSlvAdP_trCgYIARAAGAQSNwF-L9Irh_5G_X4rdnTT5aIJZVIK8H2x7k0kRghPb87YORf4GoILDkcd0a3xwdmGOtHnSYjY_yQ'
     }
   })
