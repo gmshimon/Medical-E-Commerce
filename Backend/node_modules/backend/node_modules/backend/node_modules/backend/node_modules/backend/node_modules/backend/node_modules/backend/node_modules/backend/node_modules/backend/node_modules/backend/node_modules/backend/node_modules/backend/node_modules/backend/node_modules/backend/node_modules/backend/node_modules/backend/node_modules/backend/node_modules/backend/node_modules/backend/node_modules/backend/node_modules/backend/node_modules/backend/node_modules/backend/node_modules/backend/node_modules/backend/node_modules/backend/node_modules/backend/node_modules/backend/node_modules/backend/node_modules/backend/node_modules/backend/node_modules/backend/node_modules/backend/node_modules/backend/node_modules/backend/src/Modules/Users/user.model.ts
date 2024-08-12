@@ -15,7 +15,7 @@ const userSchema = new Schema<IUser>({
     require: [true, 'Please provide the email'],
     validate: [validator.isEmail, 'Please provide a valid email'],
     lowercase: true,
-    unique: true
+    unique: [true,"Account with this email exists"]
   },
   password: {
     type: String,
@@ -28,7 +28,10 @@ const userSchema = new Schema<IUser>({
   },
   photo:{
     type:String,
-    validate: [validator.isURL, 'Please provide a valid url']
+  },
+  verified:{
+    type:Boolean,
+    default:false
   },
   role: {
     type: String,
