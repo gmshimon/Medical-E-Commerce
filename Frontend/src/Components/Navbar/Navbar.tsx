@@ -1,7 +1,7 @@
 "Use Client";
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
+  const { id } = useSelector((state: RootState) => state.category);
   const {user}=useSelector((state:RootState)=>state.user)
   const pathname = usePathname()
   const navOptions = (
@@ -26,7 +27,11 @@ const Navbar = () => {
       </li>
     </>
   );
-  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category')return null
+  useEffect(()=>{
+
+  },[pathname])
+  console.log(`/admin/edit-category/${id}`)
+  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}`)return null
   return (
     <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">

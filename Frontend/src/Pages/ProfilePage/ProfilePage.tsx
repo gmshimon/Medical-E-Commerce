@@ -9,7 +9,7 @@ const ProfilePage = () => {
   const { user } = useSelector((state: RootState) => state.user);
   return (
     <section>
-        <h1 className="text-center text-2xl my-10 font-bold">User Profile</h1>
+      <h1 className="text-center text-2xl my-10 font-bold">User Profile</h1>
       <div className="flex justify-center">
         <div className=" bg-slate-100 px-10 py-7 w-full lg:w-[900px] rounded-md">
           <form className="max-w-full">
@@ -31,13 +31,13 @@ const ProfilePage = () => {
                   <label htmlFor="category">Email </label>
                 </div>
                 <input
-                readOnly
-                name="name"
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered w-full "
-                value={user?.email}
-              />
+                  readOnly
+                  name="name"
+                  type="text"
+                  placeholder="Type here"
+                  className="input input-bordered w-full "
+                  value={user?.email}
+                />
               </div>
               <div className="flex-1 mt-4 md:mt-0">
                 <div>
@@ -49,12 +49,10 @@ const ProfilePage = () => {
                   type="text"
                   placeholder="Type here"
                   className="input input-bordered w-full "
-                    value={user?.role}
-  
+                  value={user?.role}
                 />
               </div>
             </div>
-            
           </form>
         </div>
       </div>

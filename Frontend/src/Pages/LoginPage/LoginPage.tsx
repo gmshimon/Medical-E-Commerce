@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation'
 import React, { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   const {isLoginSuccess}=useSelector((state:RootState)=>state.user)
@@ -19,6 +20,7 @@ const LoginPage = () => {
     if(isLoginSuccess){
       toast.success("Login success");
       dispatch(reset())
+      // redirect('/')
     }
   },[isLoginSuccess])
 

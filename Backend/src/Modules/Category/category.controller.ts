@@ -69,13 +69,82 @@ const getAllCategory = async (
   }
 }
 
+const updateCategoryImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const image =
+      req.protocol +
+      '://' +
+      req.get('host') +
+      '/images/category/' +
+      req?.file.filename
+
+    const data = req.body
+    const updateCategory = await Category.updateOne(
+      { _id: data.id },
+      {
+        $set: {
+          thumbnail: image
+        }
+      }
+    )
+    deleteImage(req?.file.filename)
+
+    res.status(200).json({
+      status: 'Success',
+      message: 'Category image updated successfully'
+    })
+  } catch (error) {
+    if (req.file) {
+      deleteImage(req.file.filename)
+    }
+    res.status(400).json({
+      status: 'Failed',
+      message: error
+    })
+  }
+}
+const updateCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body
+    console.log(data);
+    const updateCategory = await Category.updateOne(
+      { _id: data.id },
+      {
+        $set: {
+          name: data.name,
+          slug: data.slug
+        }
+      }
+    )
+
+    res.status(200).json({
+      status: 'Success',
+      message: 'Category updated successfully',
+      data:updateCategory
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      message: error
+    })
+  }
+}
+
 const deleteCategory = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const {id} = req.params
+    const { id } = req.params
     const category = await Category.findOne({ _id: id })
     if (!category) {
       return res.status(404).json({
@@ -104,5 +173,7 @@ const deleteCategory = async (
 export default {
   createCategory,
   getAllCategory,
-  deleteCategory
+  deleteCategory,
+  updateCategory,
+  updateCategoryImage
 }

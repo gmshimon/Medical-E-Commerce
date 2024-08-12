@@ -6,14 +6,18 @@ import {
   deleteCategory,
   getAllCategories,
   reset,
+  setCategoryId,
 } from "@/lib/features/categorySlice";
 import { RootState } from "@/lib/store";
+import { redirect } from 'next/navigation'
 import React, { useEffect, useState } from "react";
 import { FaEdit, FaUsers, FaUtensils } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 const CategoryPage = () => {
   const { categories, isCategoryCreateSuccess, isCategoryCreateError ,isCategoryDeleteError,isCategoryDeleteSuccess } =
     useSelector((state: RootState) => state.category);
@@ -24,7 +28,6 @@ const CategoryPage = () => {
   const itemsPerPage = 5; // Number of items to show per page
   const totalPages = Math.ceil(categories.length / itemsPerPage); // Calculate total pages
   const [currentPage, setCurrentPage] = useState(1);
-
   //get all categories
   const dispatch = useDispatch();
   useEffect(() => {
@@ -67,11 +70,13 @@ const CategoryPage = () => {
       image: file,
     };
     dispatch(createCategory(categoryData));
-    console.log(categoryData);
   };
-
+const handleCategoryEdit = (id:any)=>{
+    dispatch(setCategoryId(id))
+    // console.log(`/admin/edit-category/${id}`);
+    // redirect(`/admin/edit-category/66ba570f5c7a61b0c7e40697`)
+}
 const handleDeleteCategory = (id:any)=>{
-    console.log(id);
     dispatch(deleteCategory(id))
 }
   return (
@@ -147,12 +152,15 @@ const handleDeleteCategory = (id:any)=>{
                   <td>{item?.name}</td>
                   <td>{item?.slug}</td>
                   <td>
+                    <Link href={`/admin/edit-category/${item._id}`}>
                     <button
+                    onClick={()=>handleCategoryEdit(item._id)}
                       //   disabled={item?.role === 'admin'}
                       className="btn btn-warning"
                     >
                       <FaEdit />
                     </button>
+                    </Link>
                   </td>
                   <th>
                     <button

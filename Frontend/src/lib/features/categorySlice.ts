@@ -2,6 +2,7 @@ import axiosInstance from '@/utilis/axios'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 interface categoryInterface {
+  id: string | null
   categories: []
   isCategoryCreateError: boolean
   isCategoryCreateSuccess: boolean
@@ -9,23 +10,32 @@ interface categoryInterface {
   isCategoryDeleteError: boolean
   isCategoryDeleteSuccess: boolean
   isCategoryDeleteLoading: boolean
+  isUpdateCategoryImageSuccess: boolean
+  isUpdateCategoryImageError: boolean
   // isCategoryGetByIdError: boolean,
   // isCategoryGetByIdSuccess: boolean,
   // isCategoryGetByIdLoading: boolean,
   // categoryId: string | null,
   // category: {} | null,
-  // isCategoryUpdateError: boolean,
-  // isCategoryUpdateSuccess: boolean,
+  isCategoryUpdateError: boolean
+  isCategoryUpdateSuccess: boolean
+  isCategoryUpdateLoading: boolean
 }
 
 const initialState: categoryInterface = {
+  id: null,
   categories: [],
   isCategoryCreateError: false,
   isCategoryCreateSuccess: false,
   isCategoryCreateLoading: false,
   isCategoryDeleteError: false,
   isCategoryDeleteSuccess: false,
-  isCategoryDeleteLoading: false
+  isCategoryDeleteLoading: false,
+  isCategoryUpdateError: false,
+  isCategoryUpdateSuccess: false,
+  isCategoryUpdateLoading: false,
+  isUpdateCategoryImageSuccess: false,
+  isUpdateCategoryImageError: false
 }
 
 export const createCategory = createAsyncThunk('createCategory', async data => {
@@ -45,10 +55,34 @@ export const getAllCategories = createAsyncThunk(
   }
 )
 
-export const deleteCategory = createAsyncThunk('deleteCategory',async(id)=>{
-    const response = await axiosInstance.delete(`/category/delete-category/${id}`)
-    return id
-  
+export const updateCategoryImage = createAsyncThunk(
+  'updateCategoryImage',
+  async data => {
+    const response = await axiosInstance.put(
+      '/category/update-category-image',
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+  }
+)
+export const updateCategory = createAsyncThunk(
+  'updateCategory',
+  async data => {
+    const response = await axiosInstance.put(
+      '/category/update-category',
+      data
+    )
+    return response.data
+  }
+)
+
+export const deleteCategory = createAsyncThunk('deleteCategory', async id => {
+  const response = await axiosInstance.delete(`/category/delete-category/${id}`)
+  return id
 })
 
 export const categorySlice = createSlice({
@@ -62,6 +96,14 @@ export const categorySlice = createSlice({
       state.isCategoryDeleteError = false
       state.isCategoryDeleteSuccess = false
       state.isCategoryDeleteLoading = false
+      state.isCategoryUpdateError = false
+      state.isCategoryUpdateSuccess = false
+      state.isCategoryUpdateLoading = false
+      state.isUpdateCategoryImageSuccess = false
+      state.isUpdateCategoryImageError = false
+    },
+    setCategoryId: (state, action) => {
+      state.id = action.payload
     }
   },
   extraReducers: builder => {
@@ -94,16 +136,45 @@ export const categorySlice = createSlice({
         state.isCategoryDeleteLoading = false
         state.isCategoryDeleteSuccess = true
         state.isCategoryDeleteError = false
-        const result:[] = state.categories.filter(item=>item._id !== action.payload)
+        const result: [] = state.categories.filter(
+          item => item._id !== action.payload
+        )
         state.categories = result
       })
-      .addCase(deleteCategory.pending,(state)=>{
+      .addCase(deleteCategory.pending, state => {
         state.isCategoryDeleteLoading = true
         state.isCategoryDeleteSuccess = false
         state.isCategoryDeleteError = false
       })
+      .addCase(updateCategoryImage.pending, state => {
+        state.isUpdateCategoryImageError = false
+        state.isUpdateCategoryImageSuccess = false
+      })
+      .addCase(updateCategoryImage.fulfilled, state => {
+        state.isUpdateCategoryImageError = false
+        state.isUpdateCategoryImageSuccess = true
+      })
+      .addCase(updateCategoryImage.rejected, state => {
+        state.isUpdateCategoryImageError = true
+        state.isUpdateCategoryImageSuccess = false
+      })
+      .addCase(updateCategory.pending, state => {
+        state.isCategoryUpdateLoading = true
+        state.isCategoryUpdateError = false
+        state.isCategoryUpdateSuccess = false
+      })
+      .addCase(updateCategory.fulfilled, state => {
+        state.isCategoryUpdateLoading = false
+        state.isCategoryUpdateError = false
+        state.isCategoryUpdateSuccess = true
+      })
+      .addCase(updateCategory.rejected, state => {
+        state.isCategoryUpdateLoading = false
+        state.isCategoryUpdateError = true
+        state.isCategoryUpdateSuccess = false
+      })
   }
 })
 
-export const { reset } = categorySlice.actions
+export const { reset, setCategoryId } = categorySlice.actions
 export default categorySlice.reducer
