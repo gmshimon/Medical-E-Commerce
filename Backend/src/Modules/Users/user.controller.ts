@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'
 import User from './user.model'
 import path from 'path'
 import fs from 'fs'
 import sendOTPEmail from '../../utilis/sendOTP'
-import generateToken from '../../utilis/Token/generateToken';
+import generateToken from '../../middleware/Token/generateToken'
+import jwt from 'jsonwebtoken';
 
 const deleteImage = file => {
   const filePath = path.join(__dirname, '../../../images/users', file)
@@ -51,13 +52,9 @@ const registerUser = async (
   }
 }
 
-const loginUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-)=>{
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {email, pass} = req.body;
+    const { email, pass } = req.body
 
     if (!email || !pass) {
       return res.status(403).json({
@@ -73,7 +70,12 @@ const loginUser = async (
         message: 'No user with this email'
       })
     }
-
+    if (!user?.verified) {
+      return res.status(404).json({
+        status: 'Fail',
+        message: 'User Not verified'
+      })
+    }
     const isPasswordValid = bcrypt.compareSync(pass, user.password)
     if (!isPasswordValid) {
       return res.status(403).json({
@@ -81,7 +83,7 @@ const loginUser = async (
         message: 'Wrong password'
       })
     }
-    const {accessToken, refreshToken} = generateToken(user)
+    const { accessToken, refreshToken } = generateToken(user)
     const { password, ...others } = user.toObject()
     res.status(200).json({
       status: 'Success',
@@ -99,4 +101,37 @@ const loginUser = async (
   }
 }
 
-export default { registerUser,loginUser }
+const regenerateAccessToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const incomingRefreshToken =
+    req.cookies.refreshToken || req.body.refreshToken
+
+  if (!incomingRefreshToken) {
+    return res.status(401).json({ message: 'Refresh token not found' })
+  }
+  try {
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    const user = await User.findOne({email:decodedToken.email});
+    const { accessToken } = await generateToken(
+      user
+    )
+
+    res.status(200).json({
+      status:"success",
+      accessToken: accessToken,
+    })
+  } catch (error) {
+    res.status(403).json({
+      status: 'Fail',
+      message: 'Invalid refresh token'
+    })
+  }
+}
+
+export default { registerUser, loginUser,regenerateAccessToken }
