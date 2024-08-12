@@ -16,7 +16,7 @@ const Navbar = () => {
       <li>
         <Link href="/product">Product</Link>
       </li>
-      {user?.role ==='admin' ||user?.role === 'super admin' &&
+      {user?.role ==='admin' &&
         <li>
         <Link href="/admin">Admin</Link>
       </li>
@@ -26,7 +26,7 @@ const Navbar = () => {
       </li>
     </>
   );
-  if(pathname==="/admin" || pathname==="/admin/all-user")return null
+  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category')return null
   return (
     <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">

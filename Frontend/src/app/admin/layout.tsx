@@ -1,6 +1,7 @@
 // import SideNav from '@/app/ui/dashboard/sidenav';
 
 import Link from "next/link";
+import { BiCategoryAlt } from "react-icons/bi";
 import {FaHome, FaList } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { MdNoteAdd, MdOutlineMenu, MdOutlineRateReview } from "react-icons/md";
@@ -19,13 +20,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             </li>
             <li>
+              <Link href="/admin/category">
+              <BiCategoryAlt  />
+                Manage Category
+              </Link>
+            </li>
+            <li>
               <Link href="/dashboard/user-home">
               <FaList />
                 Manage Product
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/reservation">
+              <Link href="/admin/add-product">
               <MdNoteAdd />
                 Add Product
               </Link>

@@ -5,14 +5,20 @@ import "react-tabs/style/react-tabs.css";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Products from "@/Components/Products/Products";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "@/lib/features/categorySlice";
+import { RootState } from "@/lib/store";
 
 const ProductPage = () => {
+  const {categories} = useSelector((state:RootState)=>state.category)
   const pathname = usePathname();
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch()
   useEffect(() => {
-    fetch("categories.json")
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
+    // fetch("categories.json")
+    //   .then((res) => res.json())
+    //   .then((data) => setCategories(data));
+    dispatch(getAllCategories())
   }, []);
 
   return (
@@ -30,7 +36,7 @@ const ProductPage = () => {
         <TabList>
           <Tab>All</Tab>
           {categories.map((item) => (
-            <Tab>{item.name}</Tab>
+            <Tab key={item?._id}>{item.name}</Tab>
           ))}
         </TabList>
         <TabPanel>
