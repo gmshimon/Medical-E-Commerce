@@ -5,7 +5,7 @@ import path from 'path';
 
 // Define the storage engine with TypeScript
 const storage: StorageEngine = multer.diskStorage({
-    destination: 'images/users/',
+    destination: 'images/category/',
     filename: (req: Request, file: Express.Multer.File, cb) => {
         const uniqueSuffix = Date.now() + '-';
         cb(null, uniqueSuffix + file.originalname);

@@ -39,7 +39,7 @@ const registerUser = async (
     res.status(200).json({
       status: 'success',
       message: 'Successfully registered',
-      data: result
+      data: result.email
     })
   } catch (error) {
     if (req.file) {
