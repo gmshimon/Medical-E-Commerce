@@ -4,6 +4,7 @@ import userSlice from './features/userSlice'
 import cartSlice from './features/cartSlice'
 import storage from 'redux-persist/lib/storage'
 import  categorySlice  from './features/categorySlice'
+import  productSlice  from './features/productSlice'
 
 const persistConfig = {
   key: 'root',
@@ -14,7 +15,8 @@ const persistConfig = {
 const reducer = combineReducers({
   user: userSlice,
   cart: cartSlice,
-  category:categorySlice
+  category:categorySlice,
+  product:productSlice
 })
 const persistedReducers = persistReducer(persistConfig, reducer)
 

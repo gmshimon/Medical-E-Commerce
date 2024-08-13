@@ -18,10 +18,12 @@ connectDB()
 import userRouter from './Modules/Users/user.routes'
 import otpRouter from './Modules/OTP/otp.routes'
 import categoryRouter from './Modules/Category/category.routes'
+import productRouter from './Modules/Product/product.routes'
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/otp', otpRouter)
 app.use('/api/v1/category', categoryRouter)
+app.use('/api/v1/product', productRouter)
 
 app.get('/images/users/:filename', (req, res) => {
   const { filename } = req.params
