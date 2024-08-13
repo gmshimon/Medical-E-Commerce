@@ -8,14 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const variants = [
-  { name: "100mg", price: 12 },
-  { name: "200mg", price: 15 },
-  { name: "300mg", price: 18 },
-  { name: "500mg", price: 20 },
-];
+// const variants = [
+//   { name: "100mg", price: 12 },
+//   { name: "200mg", price: 15 },
+//   { name: "300mg", price: 18 },
+//   { name: "500mg", price: 20 },
+// ];
 const page = ({ params }: { params: { id: string } }) => {
   const { categories } = useSelector((state: RootState) => state.category);
+  const { variants } = useSelector((state: RootState) => state.variant);
   const { products } = useSelector((state: RootState) => state.product);
   const { isProductUpdateError, isProductUpdateSuccess } = useSelector(
     (state: RootState) => state.product
@@ -226,7 +227,7 @@ const page = ({ params }: { params: { id: string } }) => {
                     Select Variant
                   </option>
                 
-                  {variants.map((item) => 
+                  {variants?.map((item) => 
                    <option key={item.name} value={JSON.stringify(item)}>
                       {item.name} (${item.price})
                     </option>

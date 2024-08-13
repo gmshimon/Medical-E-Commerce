@@ -65,7 +65,7 @@ useEffect(()=>{
           </thead>
           <tbody>
             {cartItems.map((item, index) => (
-              <tr key={item?._id}>
+              <tr key={indexOfFirstItem+item?._id}>
                 <th>{index + 1}</th>
                 <td>
                   <div className="flex items-center gap-3">

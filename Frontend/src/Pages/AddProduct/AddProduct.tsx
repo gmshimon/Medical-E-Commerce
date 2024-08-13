@@ -2,22 +2,25 @@
 
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import { createProduct, reset } from "@/lib/features/productSlice";
+import { getAllVariants } from "@/lib/features/variantSlice";
 import { RootState } from "@/lib/store";
 import { ChangeEvent, useEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const variants = [
-  { name: "100mg", price: 12 },
-  { name: "200mg", price: 15 },
-  { name: "300mg", price: 18 },
-  { name: "500mg", price: 20 },
-];
+// const variants = [
+//   { name: "100mg", price: 12 },
+//   { name: "200mg", price: 15 },
+//   { name: "300mg", price: 18 },
+//   { name: "500mg", price: 20 },
+// ];
 
 const AddProduct = () => {
   const { categories } = useSelector((state: RootState) => state.category);
+  const { variants } = useSelector((state: RootState) => state.variant);
   const {isProductCreateError,isProductCreateSuccess} = useSelector((state: RootState) => state.product)
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -39,6 +42,10 @@ const AddProduct = () => {
     );
     setVariants(selectedOptions);
   };
+
+  useEffect(()=>{
+    dispatch(getAllVariants())
+  },[])
 
   useEffect(()=>{
     if(isProductCreateSuccess){
@@ -198,7 +205,7 @@ const AddProduct = () => {
                   <option disabled value="">
                     Select Variant
                   </option>
-                  {variants.map((item) => (
+                  {variants?.map((item) => (
                     <option key={item.name} value={JSON.stringify(item)}>
                       {item.name} (${item.price})
                     </option>
@@ -250,7 +257,7 @@ const AddProduct = () => {
             {/* Submit Button */}
             <div className="mt-4">
               <button className="btn btn-active btn-warning text-white">
-                Add Item <FaUtensils />
+                Add Product <IoIosAddCircle />
               </button>
             </div>
           </form>

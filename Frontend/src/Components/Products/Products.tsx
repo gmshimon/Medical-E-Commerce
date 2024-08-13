@@ -7,6 +7,7 @@ import ProductModal from "../ProductModal/ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { reset } from "@/lib/features/cartSlice";
+import { getAllProduct } from "@/lib/features/productSlice";
 
 // Define the type for props
 interface ProductsProps {
@@ -15,9 +16,10 @@ interface ProductsProps {
 
 // Define the component
 const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
-  const { isCartItemAdded } = useSelector((state: RootState) => state.cart);
+  const { isCartItemAdded } = useSelector((state: RootState) => state.cart); 
+  const { products } = useSelector((state: RootState) => state.product); 
   // Use the type in the state
-  const [products, setProducts] = useState<ProductInterface[]>([]);
+  // const [products, setProducts] = useState<ProductInterface[]>([]);
   const [singleProduct, setSingleProduct] = useState<ProductInterface | null>(
     null
   );
@@ -28,24 +30,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
   const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/products.json");
-        const data: ProductInterface[] = await response.json();
-        if (CategoryName) {
-          const filteredProducts = data.filter((product) =>
-            product.categories.includes(CategoryName)
-          );
-          setProducts(filteredProducts);
-        } else {
-          setProducts(data);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
+    dispatch(getAllProduct())
   }, [CategoryName]);
   // if (isCartItemAdded) {
   //   toast.success("Item Added!", {
@@ -58,7 +43,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
       <ToastContainer autoClose={3000}/>
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
-        {products.map((item) => (
+        {products?.map((item) => (
           <div
             key={item.name}
             className="card card-compact bg-base-100 w-96 shadow-xl relative"

@@ -146,7 +146,7 @@ const handleDeleteCategory = (id:any)=>{
             <tbody>
               {cartItems.map((item, index) => (
                 <tr key={item?._id}>
-                  <th>{index + 1}</th>
+                  <th>{indexOfFirstItem+index + 1}</th>
                   <td>{item?.name}</td>
                   <td>{item?.slug}</td>
                   <td>
