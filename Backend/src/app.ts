@@ -19,11 +19,13 @@ import userRouter from './Modules/Users/user.routes'
 import otpRouter from './Modules/OTP/otp.routes'
 import categoryRouter from './Modules/Category/category.routes'
 import productRouter from './Modules/Product/product.routes'
+import variantRouter from './Modules/Variant/variant.routes'
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/otp', otpRouter)
 app.use('/api/v1/category', categoryRouter)
 app.use('/api/v1/product', productRouter)
+app.use('/api/v1/variant', variantRouter)
 
 app.get('/images/users/:filename', (req, res) => {
   const { filename } = req.params
@@ -36,6 +38,12 @@ app.get('/images/category/:filename', (req, res) => {
   const imagePath = path.join(__dirname, '../images/category', filename)
   res.sendFile(imagePath)
 })
+app.get('/images/products/:filename', (req, res) => {
+  const { filename } = req.params
+  const imagePath = path.join(__dirname, '../images/products', filename)
+  res.sendFile(imagePath)
+})
+
 app.get('/', async (req: Request, res: Response, nest: NextFunction) => {
   res.send('Hello from Express Server')
 })

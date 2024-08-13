@@ -19,7 +19,7 @@ const verifyLoginToken = async (req: Request, res: Response,next:NextFunction)=>
         
         req.body.user = decoded;
         console.log(decoded);
-        // next()
+        next()
     }  catch (error) {
         return res.status(403).json({
             status: 'Failed',

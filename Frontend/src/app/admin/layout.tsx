@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/user-home">
+              <Link href="/admin/manage-product">
               <FaList />
                 Manage Product
               </Link>

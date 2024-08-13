@@ -17,14 +17,16 @@ const deleteImage = file => {
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body
-    let images=[]
-    req?.files?.map(item=>{
-        const url = req.protocol +
+    let images = []
+    req?.files?.map(item => {
+      const url =
+        req.protocol +
         '://' +
         req.get('host') +
-        '/images/products/' + item.filename
+        '/images/products/' +
+        item.filename
 
-        images.push(url)
+      images.push(url)
     })
 
     data.photos = images
@@ -37,7 +39,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     })
   } catch (error) {
     if (req.files) {
-      req.files.map(item=>deleteImage(item.filename))
+      req.files.map(item => deleteImage(item.filename))
     }
     res.status(400).json({
       status: 'Failed',
@@ -46,7 +48,64 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getAllProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const results = await ProductModel.find({})
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Successfully fetched',
+      data: results
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      message: error
+    })
+  }
+}
+
+const deleteProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params
+    const getData = await ProductModel.findOne({ _id: id })
+
+    if (!getData) {
+      return res.status(404).json({
+        status: 'Failed',
+        message: 'Variant not found'
+      })
+    }
+
+    const result = await ProductModel.deleteOne({ _id: id })
+    getData.photos.map(item => {
+      const parts = item.split('/')
+      const lastPart = parts[parts.length - 1]
+      deleteImage(lastPart)
+    })
+    res.status(200).json({
+      status: 'Success',
+      message: 'Variant created successfully',
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      message: error
+    })
+  }
+}
 
 export default {
-    createPost
+  createPost,
+  getAllProducts,
+  deleteProduct
 }

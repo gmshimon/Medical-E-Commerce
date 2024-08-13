@@ -101,6 +101,23 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
+const getAllUsers = async(req: Request,
+  res: Response,
+  next: NextFunction)=>{
+    try {
+      const users = await User.find().select('-password')
+      res.status(200).json({
+        status: 'Success',
+        data: users
+      })
+    } catch (error) {
+      res.status(400).json({
+        status: 'Fail',
+        message: error
+      })
+    }
+  }
+
 const regenerateAccessToken = async (
   req: Request,
   res: Response,
@@ -134,4 +151,4 @@ const regenerateAccessToken = async (
   }
 }
 
-export default { registerUser, loginUser,regenerateAccessToken }
+export default { registerUser, loginUser,regenerateAccessToken ,getAllUsers}

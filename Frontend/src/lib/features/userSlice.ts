@@ -13,6 +13,10 @@ export interface CounterState {
   isLoginSuccess: boolean
   isLoginPending: boolean
   user: {} | null
+  users:[] | null
+  isGetAllUsersSuccess: boolean
+  isGetAllUsersLoading: boolean
+  isGetAllUsersError: boolean
 }
 
 // Define the initial state using that type
@@ -27,7 +31,11 @@ const initialState: CounterState = {
   isLoginError: false,
   isLoginSuccess: false,
   isLoginPending: false,
-  user: null
+  user: null,
+  users: null,
+  isGetAllUsersSuccess: false,
+  isGetAllUsersLoading: false,
+  isGetAllUsersError: false,
 }
 
 export const registerUser = createAsyncThunk('registerUser', async data => {
@@ -57,6 +65,16 @@ export const loginUser = createAsyncThunk('loginUser', async data => {
   return result.data
 })
 
+export const getAllUsers = createAsyncThunk('getAllUsers',async()=>{
+  const token = JSON.parse(localStorage.getItem('userToken'))
+  const result = await axiosInstance.get('/user/get-users',{
+    headers: {
+      authorization: `Bearer ${token.accessToken}`
+    }
+  })
+  return result.data.data
+})
+
 export const verifyOTP = createAsyncThunk('verifyOTP', async data => {
   const response = await axiosInstance.post('otp/verify-otp', data)
   return response.data
@@ -75,6 +93,9 @@ export const counterSlice = createSlice({
       state.isLoginError = false
       state.isLoginSuccess = false
       state.isLoginPending = false
+      state.isGetAllUsersSuccess=false
+      state.isGetAllUsersLoading=false
+      state.isGetAllUsersError=false
     },
     increment: state => {
       state.value += 1
@@ -140,6 +161,22 @@ export const counterSlice = createSlice({
         state.isLoginError = true
         state.isLoginSuccess = false
       })
+      .addCase(getAllUsers.pending,state=>{
+        state.isGetAllUsersLoading = true
+        state.isGetAllUsersError = false
+        state.isGetAllUsersSuccess = false
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.isGetAllUsersLoading = false
+        state.isGetAllUsersError = false
+        state.isGetAllUsersSuccess = true
+        state.users = action.payload
+      })
+      .addCase(getAllUsers.rejected, state => {
+        state.isGetAllUsersLoading = false
+        state.isGetAllUsersError = true
+        state.isGetAllUsersSuccess = false
+      })
   }
 })
 
@@ -151,8 +188,5 @@ export const {
   setisUserVerified,
   setUserNull
 } = counterSlice.actions
-
-// Other code such as selectors can use the imported `RootState` type
-// export const selectCount = (state: RootState) => state.counter.value
 
 export default counterSlice.reducer

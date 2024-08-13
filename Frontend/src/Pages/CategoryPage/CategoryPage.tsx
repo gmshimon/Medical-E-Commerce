@@ -73,8 +73,6 @@ const CategoryPage = () => {
   };
 const handleCategoryEdit = (id:any)=>{
     dispatch(setCategoryId(id))
-    // console.log(`/admin/edit-category/${id}`);
-    // redirect(`/admin/edit-category/66ba570f5c7a61b0c7e40697`)
 }
 const handleDeleteCategory = (id:any)=>{
     dispatch(deleteCategory(id))
@@ -140,7 +138,7 @@ const handleDeleteCategory = (id:any)=>{
               <tr>
                 <th>#</th>
                 <th>NAME</th>
-                <th>EMAIL</th>
+                <th>SLUG</th>
                 <th>Edit</th>
                 <th>Delete</th>
               </tr>

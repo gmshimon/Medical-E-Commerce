@@ -177,7 +177,7 @@ const AddProduct = () => {
                   className="select select-bordered w-full"
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option disabled value="">
+                  <option disabled selected value="">
                     Select category
                   </option>
                   {categories.map((category) => (

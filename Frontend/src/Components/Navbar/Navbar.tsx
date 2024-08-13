@@ -30,8 +30,7 @@ const Navbar = () => {
   useEffect(()=>{
 
   },[pathname])
-  console.log(`/admin/edit-category/${id}`)
-  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}`)return null
+  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}` || pathname==='/admin/manage-product')return null
   return (
     <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">
