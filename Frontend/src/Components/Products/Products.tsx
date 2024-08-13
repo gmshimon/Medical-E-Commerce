@@ -16,10 +16,10 @@ interface ProductsProps {
 
 // Define the component
 const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
-  const { isCartItemAdded } = useSelector((state: RootState) => state.cart); 
-  const { products } = useSelector((state: RootState) => state.product); 
+  const { isCartItemAdded } = useSelector((state: RootState) => state.cart);
+  const { products } = useSelector((state: RootState) => state.product);
   // Use the type in the state
-  // const [products, setProducts] = useState<ProductInterface[]>([]);
+  const [productsData, setProducts] = useState<ProductInterface[]>([]);
   const [singleProduct, setSingleProduct] = useState<ProductInterface | null>(
     null
   );
@@ -31,6 +31,14 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
 
   useEffect(() => {
     dispatch(getAllProduct())
+    if (CategoryName) {
+      const filteredProducts = products.filter((product) =>
+        product.categories.includes(CategoryName)
+      );
+      setProducts(filteredProducts);
+    } else {
+      setProducts(products);
+    }
   }, [CategoryName]);
   // if (isCartItemAdded) {
   //   toast.success("Item Added!", {
@@ -40,10 +48,10 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
   // }
   return (
     <div>
-      <ToastContainer autoClose={3000}/>
+      <ToastContainer autoClose={3000} />
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
-        {products?.map((item) => (
+        {productsData.map((item) => (
           <div
             key={item.name}
             className="card card-compact bg-base-100 w-96 shadow-xl relative"

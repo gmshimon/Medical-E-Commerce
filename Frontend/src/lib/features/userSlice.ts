@@ -61,6 +61,7 @@ export const loginUser = createAsyncThunk('loginUser', async data => {
         tokenExpiration: tokenExpiration
       })
     )
+    localStorage.setItem('role', result.data.role)
   }
   return result.data
 })

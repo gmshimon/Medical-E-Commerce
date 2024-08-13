@@ -101,9 +101,11 @@ const Navbar = () => {
                 {carts.reduce((acc, curr) => acc + curr.totalPrice, 0)}
               </span>
               <div className="card-actions">
+              <Link className="w-full" href="/cart">
                 <button className="btn btn-primary btn-block">
-                  <Link href="/cart">View cart</Link>
+                  View cart
                 </button>
+                </Link>
               </div>
             </div>
           </div>

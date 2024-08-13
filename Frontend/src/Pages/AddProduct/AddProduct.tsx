@@ -21,7 +21,9 @@ import "react-toastify/dist/ReactToastify.css";
 const AddProduct = () => {
   const { categories } = useSelector((state: RootState) => state.category);
   const { variants } = useSelector((state: RootState) => state.variant);
-  const {isProductCreateError,isProductCreateSuccess} = useSelector((state: RootState) => state.product)
+  const { isProductCreateError, isProductCreateSuccess } = useSelector(
+    (state: RootState) => state.product
+  );
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDes] = useState("");
@@ -43,20 +45,20 @@ const AddProduct = () => {
     setVariants(selectedOptions);
   };
 
-  useEffect(()=>{
-    dispatch(getAllVariants())
-  },[])
+  useEffect(() => {
+    dispatch(getAllVariants());
+  }, []);
 
-  useEffect(()=>{
-    if(isProductCreateSuccess){
+  useEffect(() => {
+    if (isProductCreateSuccess) {
       toast.success("New Product created");
-      dispatch(reset())
+      dispatch(reset());
     }
-    if(isProductCreateError){
+    if (isProductCreateError) {
       toast.error("Something went wrong");
-      dispatch(reset())
+      dispatch(reset());
     }
-  },[isProductCreateSuccess,isProductCreateError])
+  }, [isProductCreateSuccess, isProductCreateError]);
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +78,7 @@ const AddProduct = () => {
     variant.forEach((v, index) => {
       formData.append(`variants[${index}][name]`, v.name);
       formData.append(`variants[${index}][price]`, v.price.toString());
-  });
+    });
     // Append each photo
     if (photos) {
       Array.from(photos).forEach((photo) => {
@@ -89,7 +91,7 @@ const AddProduct = () => {
 
   return (
     <section>
-      <ToastContainer position="top-right"/>
+      <ToastContainer position="top-right" />
       <SectionTitle heading={"add product"} subHeading={"What's New"} />
       <div className="flex justify-center">
         <div className="bg-slate-100 px-10 py-7 w-full lg:w-[900px] rounded-md">

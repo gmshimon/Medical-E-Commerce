@@ -54,6 +54,8 @@ const ProductModal: React.FC<ModalProps> = ({
       variant: activeVariant?.name || '',
       description: product.description,
       photos: product.photos,
+      discount:product.discount,
+      totalDiscount: product.discount,
       quantity: 1
     }
     dispatch(addItems(productInfo))
