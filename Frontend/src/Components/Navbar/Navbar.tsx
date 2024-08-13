@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
   const { id } = useSelector((state: RootState) => state.category);
+  const { productID } = useSelector((state: RootState) => state.product);
   const {user}=useSelector((state:RootState)=>state.user)
   const pathname = usePathname()
   const navOptions = (
@@ -30,7 +31,7 @@ const Navbar = () => {
   useEffect(()=>{
 
   },[pathname])
-  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}` || pathname==='/admin/manage-product')return null
+  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}` || pathname==='/admin/manage-product' || pathname===`/admin/edit-product/${productID}` )return null
   return (
     <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">

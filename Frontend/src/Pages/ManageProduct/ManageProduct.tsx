@@ -1,7 +1,7 @@
 "use client";
 import Pagination from "@/Components/Pagination/Pagination";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
-import { deleteProduct, getAllProduct, reset } from "@/lib/features/productSlice";
+import { deleteProduct, getAllProduct, reset, setProductId } from "@/lib/features/productSlice";
 import { RootState } from "@/lib/store";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -107,9 +107,9 @@ useEffect(()=>{
                   </span>
                 </td>
                 <td>
-                  <Link href={`/admin/edit-category/${item._id}`}>
+                  <Link href={`/admin/edit-product/${item._id}`}>
                     <button
-                      // onClick={()=>handleCategoryEdit(item._id)}
+                      onClick={()=>dispatch(setProductId(item._id))}
                       //   disabled={item?.role === 'admin'}
                       className="btn btn-warning"
                     >

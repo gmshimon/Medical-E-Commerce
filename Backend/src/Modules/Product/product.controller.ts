@@ -81,7 +81,7 @@ const deleteProduct = async (
     if (!getData) {
       return res.status(404).json({
         status: 'Failed',
-        message: 'Variant not found'
+        message: 'Product not found'
       })
     }
 
@@ -93,7 +93,42 @@ const deleteProduct = async (
     })
     res.status(200).json({
       status: 'Success',
-      message: 'Variant created successfully',
+      message: 'Product created successfully',
+      data: result
+    })
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      message: error
+    })
+  }
+}
+const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params
+    const data = req.body
+    const getData = await ProductModel.findOne({ _id: id })
+
+    if (!getData) {
+      return res.status(404).json({
+        status: 'Failed',
+        message: 'Product not found'
+      })
+    }
+
+    const result = await ProductModel.updateOne(
+      { _id: id },
+      {
+        $set:data
+      }
+    )
+    res.status(200).json({
+      status: 'Success',
+      message: 'Product updated successfully',
       data: result
     })
   } catch (error) {
@@ -107,5 +142,6 @@ const deleteProduct = async (
 export default {
   createPost,
   getAllProducts,
-  deleteProduct
+  deleteProduct,
+  updateProduct
 }

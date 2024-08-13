@@ -2,6 +2,7 @@ import axiosInstance from '@/utilis/axios'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 interface productInterface {
+  productID:String | null
   products: [] | null
   isProductCreateSuccess: boolean
   isProductCreateError: boolean
@@ -12,9 +13,13 @@ interface productInterface {
   isProductDeleteSuccess: boolean
   isProductDeleteError: boolean
   isProductDeletePending: boolean
+  isProductUpdateSuccess: boolean
+  isProductUpdateError: boolean
+  isProductUpdatePending: boolean
 }
 
 const initialState: productInterface = {
+  productID:null,
   products: null,
   isProductCreateSuccess: false,
   isProductCreateError: false,
@@ -25,6 +30,9 @@ const initialState: productInterface = {
   isProductDeleteSuccess:false,
   isProductDeleteError:false,
   isProductDeletePending:false,
+  isProductUpdateSuccess: false,
+  isProductUpdateError: false,
+  isProductUpdatePending: false,
 }
 
 export const createProduct = createAsyncThunk(
@@ -46,6 +54,16 @@ export const createProduct = createAsyncThunk(
 export const getAllProduct = createAsyncThunk('getAllProduct',async()=>{
   const result = await axiosInstance.get('/product')
   return result.data.data
+})
+
+export const updateProduct = createAsyncThunk('updateProduct',async({id,data})=>{
+  const token = JSON.parse(localStorage.getItem('userToken'))
+  const result = await axiosInstance.put(`/product/update-product/${id}`,data,{
+    headers: {
+      authorization: `Bearer ${token.accessToken}`
+    }
+  })
+  return result.data
 })
 
 export const deleteProduct = createAsyncThunk('deleteProduct',async(id)=>{
@@ -72,6 +90,12 @@ export const productSlice = createSlice({
       state.isProductDeleteSuccess=false;
       state.isProductDeleteError=false;
       state.isProductDeletePending=false;
+      state.isProductUpdateSuccess=false;
+      state.isProductUpdateError=false;
+      state.isProductUpdatePending=false;
+    },
+    setProductId:(state,action)=>{
+      state.productID = action.payload
     }
   },
   extraReducers: builder => {
@@ -127,8 +151,23 @@ export const productSlice = createSlice({
         state.isProductDeleteError=true;
         state.isProductDeletePending=false;
       })
+      .addCase(updateProduct.pending,(state,action)=>{
+        state.isProductUpdateSuccess=false;
+        state.isProductUpdateError=false;
+        state.isProductUpdatePending=true;
+      })
+      .addCase(updateProduct.fulfilled,(state,action)=>{
+        state.isProductUpdateSuccess=true;
+        state.isProductUpdateError=false;
+        state.isProductUpdatePending=false
+      })
+      .addCase(updateProduct.rejected,(state,action)=>{
+        state.isProductUpdateSuccess=false;
+        state.isProductUpdateError=true;
+        state.isProductUpdatePending=false;
+      })
   }
 })
 
-export const { reset } = productSlice.actions
+export const { reset,setProductId } = productSlice.actions
 export default productSlice.reducer
