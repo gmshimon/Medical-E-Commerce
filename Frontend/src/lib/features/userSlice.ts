@@ -61,7 +61,6 @@ export const loginUser = createAsyncThunk('loginUser', async data => {
         tokenExpiration: tokenExpiration
       })
     )
-    localStorage.setItem('role', result.data.role)
   }
   return result.data
 })
@@ -112,7 +111,13 @@ export const counterSlice = createSlice({
       state.isUserVerified = false
     },
     setUserNull: state => {
+      state.users=null
       state.user = null
+    },
+    logout: state => {
+      state.users=null
+      state.user = null
+      localStorage.removeItem("userToken");
     }
   },
   extraReducers: builder => {
@@ -151,7 +156,7 @@ export const counterSlice = createSlice({
         state.isLoginError = false
         state.isLoginSuccess = false
       })
-      .addCase(loginUser.fulfilled, (state,action) => {
+      .addCase(loginUser.fulfilled, (state,action:PayloadAction<number>) => {
         state.isLoginPending = false
         state.isLoginError = false
         state.isLoginSuccess = true
@@ -167,7 +172,7 @@ export const counterSlice = createSlice({
         state.isGetAllUsersError = false
         state.isGetAllUsersSuccess = false
       })
-      .addCase(getAllUsers.fulfilled, (state, action) => {
+      .addCase(getAllUsers.fulfilled, (state, action:PayloadAction<number>) => {
         state.isGetAllUsersLoading = false
         state.isGetAllUsersError = false
         state.isGetAllUsersSuccess = true
@@ -183,6 +188,7 @@ export const counterSlice = createSlice({
 
 export const {
   reset,
+  logout,
   increment,
   decrement,
   incrementByAmount,

@@ -1,5 +1,5 @@
 import axiosInstance from '@/utilis/axios'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { stat } from 'fs'
 
 interface orderInterface {
@@ -120,22 +120,25 @@ export const orderSlice = createSlice({
       state.isUpdateOrderSuccess=false
       state.isUpdateOrderError=false
     },
-    setDivision: (state, action) => {
+    setOrdersNull:(state)=>{
+      state.orders=null;
+    },
+    setDivision: (state, action:PayloadAction<string>) => {
       state.division = action.payload
     },
-    setDistrict: (state, action) => {
+    setDistrict: (state, action:PayloadAction<string>) => {
       state.district = action.payload
     },
-    setSubDistrict: (state, action) => {
+    setSubDistrict: (state, action:PayloadAction<string>) => {
       state.sub_district = action.payload
     },
-    setAddress: (state, action) => {
+    setAddress: (state, action:PayloadAction<string>) => {
       state.address = action.payload
     },
-    setName: (state, action) => {
+    setName: (state, action:PayloadAction<string>) => {
       state.name = action.payload
     },
-    setPhone: (state, action) => {
+    setPhone: (state, action:PayloadAction<string>) => {
       state.phone = action.payload
     }
   },
@@ -227,6 +230,7 @@ export const orderSlice = createSlice({
 
 export const {
   reset,
+  setOrdersNull,
   setDivision,
   setDistrict,
   setSubDistrict,

@@ -10,6 +10,7 @@ const CheckToken = () => {
     const checkTokenExpiration = () => {
       const storedToken = localStorage.getItem("userToken");
       if (storedToken) {
+        console.log("token checking");
         const { tokenExpiration } = JSON.parse(storedToken);
         const currentTime = new Date().getTime(); //get the current time 
         if (currentTime > tokenExpiration) { // check the time with the token expiration

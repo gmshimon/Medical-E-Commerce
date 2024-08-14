@@ -1,11 +1,12 @@
-"Use Client";
+
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { BsCart3 } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
 import { usePathname } from "next/navigation";
+import { logout } from "@/lib/features/userSlice";
+import { setOrdersNull } from "@/lib/features/orderSlice";
 
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
@@ -14,6 +15,8 @@ const Navbar = () => {
   const { productID } = useSelector((state: RootState) => state.product);
   const { user } = useSelector((state: RootState) => state.user);
   const pathname = usePathname();
+  const dispatch = useDispatch();
+
   const navOptions = (
     <>
       <li>
@@ -138,12 +141,15 @@ const Navbar = () => {
               <li>
                 <Link href="/profile">Profile</Link>
                 <Link href="/my-order">My Order</Link>
-                <Link href="/profile">Logout</Link>
+                <span onClick={()=>{
+                  dispatch(setOrdersNull())
+                  dispatch(logout())
+                }}>Logout</span>
               </li>
             </ul>
           </div>
         ) : (
-          <li>
+          <li className="list-none ml-2">
             <Link href="/login">Login</Link>
           </li>
         )}

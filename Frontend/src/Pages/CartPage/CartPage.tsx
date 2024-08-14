@@ -1,4 +1,5 @@
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import Pagination from "@/Components/Pagination/Pagination";
 import ShippingAddress from "@/Components/ShippingAddress/ShippingAddress";
 import cartInterface from "@/Interface/cart.interface";
@@ -73,6 +74,16 @@ const CartPage = () => {
     };
     dispatch(createOrder(orderData));
   };
+
+  //check the token and user
+  const checkTokenExpiration = CheckToken();
+  useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    checkTokenExpiration();
+    const tokenExpirationInterval = setInterval(checkTokenExpiration, 1 * 1000);
+    // Clean up the interval on component unmount
+    return () => clearInterval(tokenExpirationInterval);
+  }, []);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

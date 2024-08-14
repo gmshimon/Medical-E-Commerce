@@ -1,12 +1,23 @@
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import { RootState } from "@/lib/store";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaUtensils } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
   const { user } = useSelector((state: RootState) => state.user);
+
+  // check the token and user
+  const checkTokenExpiration = CheckToken()
+  useEffect(() => {
+      // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+      checkTokenExpiration();
+      const tokenExpirationInterval = setInterval(checkTokenExpiration, 1 * 1000);
+      // Clean up the interval on component unmount
+      return () => clearInterval(tokenExpirationInterval);
+    }, []);
   return (
     <section>
       <h1 className="text-center text-2xl my-10 font-bold">User Profile</h1>

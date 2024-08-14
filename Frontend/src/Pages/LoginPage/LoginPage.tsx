@@ -36,8 +36,6 @@ const LoginPage = () => {
       pass,
     };
     dispatch(loginUser(formData));
-
-    console.log(formData);
   }
 
   return (
