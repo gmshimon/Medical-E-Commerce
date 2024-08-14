@@ -1,12 +1,23 @@
-import CartPage from '@/Pages/CartPage/CartPage';
-import React from 'react';
+"use client";
+import CartPage from "@/Pages/CartPage/CartPage";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 
 const page = () => {
-    return (
-       <div>
-        <CartPage/>
-       </div>
-    );
+const checkTokenExpiration = CheckToken()
+useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    checkTokenExpiration();
+    const tokenExpirationInterval = setInterval(checkTokenExpiration, 1 * 1000);
+    // Clean up the interval on component unmount
+    return () => clearInterval(tokenExpirationInterval);
+  }, []);
+  return (
+    <div>
+      <CartPage />
+    </div>
+  );
 };
 
 export default page;

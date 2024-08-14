@@ -2,9 +2,14 @@
 import Pagination from "@/Components/Pagination/Pagination";
 import ShippingAddress from "@/Components/ShippingAddress/ShippingAddress";
 import cartInterface from "@/Interface/cart.interface";
-import { decrementQuantity, incrementQuantity, setCartNull } from "@/lib/features/cartSlice";
+import {
+  decrementQuantity,
+  incrementQuantity,
+  setCartNull,
+} from "@/lib/features/cartSlice";
 import { createOrder, reset } from "@/lib/features/orderSlice";
 import { RootState } from "@/lib/store";
+import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -12,23 +17,31 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CartPage = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
-  const { division,district,sub_district,address,name, phone,isCreateOrderSuccess,isCreateOrderError} = useSelector((state: RootState) => state.order);
+  const {
+    division,
+    district,
+    sub_district,
+    address,
+    name,
+    phone,
+    isCreateOrderSuccess,
+    isCreateOrderError,
+  } = useSelector((state: RootState) => state.order);
   const dispatch = useDispatch();
   const itemsPerPage = 5; // Number of items to show per page
   const totalPages = Math.ceil(carts.length / itemsPerPage); // Calculate total pages
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(()=>{
-    if(isCreateOrderSuccess){
+  useEffect(() => {
+    if (isCreateOrderSuccess) {
       toast.success("Order placed successfully");
       dispatch(reset());
-      dispatch(setCartNull()) // empty the cart
+      dispatch(setCartNull()); // empty the cart
     }
-    if(isCreateOrderError){
+    if (isCreateOrderError) {
       toast.error("Failed to place order");
       dispatch(reset());
     }
-  },[isCreateOrderSuccess,isCreateOrderError])
+  }, [isCreateOrderSuccess, isCreateOrderError]);
 
   const handleIncrementQuantity = (item: cartInterface): void => {
     dispatch(incrementQuantity(item));
@@ -38,9 +51,15 @@ const CartPage = () => {
     dispatch(decrementQuantity(item));
   };
 
-  const handlePlaceOder = () =>{
-    const totalSum:Number|undefined = carts?.reduce((accumulator, product) => accumulator + product.totalPrice, 0);
-    const totalDis:Number|undefined = carts?.reduce((accumulator, product) => accumulator + product.totalDiscount, 0);
+  const handlePlaceOder = () => {
+    const totalSum: Number | undefined = carts?.reduce(
+      (accumulator, product) => accumulator + product.totalPrice,
+      0
+    );
+    const totalDis: Number | undefined = carts?.reduce(
+      (accumulator, product) => accumulator + product.totalDiscount,
+      0
+    );
     const orderData = {
       division,
       district,
@@ -49,11 +68,11 @@ const CartPage = () => {
       name,
       phone,
       carts,
-      total_price:totalSum +5 || 0,
+      total_price: totalSum + 5 || 0,
       total_discount: totalDis || 0,
-    }
+    };
     dispatch(createOrder(orderData));
-  }
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -65,7 +84,7 @@ const CartPage = () => {
 
   return (
     <div className="mt-10">
-       <ToastContainer position="top-right"/>
+      <ToastContainer position="top-right" />
       <div className="overflow-x-auto h-[600px] lg:h-[450px] ">
         <table className="table">
           {/* head */}
@@ -128,7 +147,7 @@ const CartPage = () => {
         handlePageChange={handlePageChange}
       />
       <div>
-      <ShippingAddress/>
+        <ShippingAddress />
       </div>
       <div className="flex justify-center mt-10">
         <div>
@@ -137,7 +156,9 @@ const CartPage = () => {
               <tr>
                 <td className="px-4">Subtotal:</td>
                 <td className="px-4">
-                  +${carts.reduce((acc, curr) => acc + curr.totalPrice, 0) + carts.reduce((acc, curr) => acc + curr.totalDiscount, 0)}
+                  +$
+                  {carts.reduce((acc, curr) => acc + curr.totalPrice, 0) +
+                    carts.reduce((acc, curr) => acc + curr.totalDiscount, 0)}
                 </td>
               </tr>
               <tr>
@@ -146,7 +167,9 @@ const CartPage = () => {
               </tr>
               <tr>
                 <td className="px-4">Discount:</td>
-                <td className="px-4">-${carts.reduce((acc, curr) => acc + curr.totalDiscount, 0)}</td>
+                <td className="px-4">
+                  -${carts.reduce((acc, curr) => acc + curr.totalDiscount, 0)}
+                </td>
               </tr>
               <tr>
                 <td className="px-4 font-bold">Total:</td>
@@ -157,7 +180,13 @@ const CartPage = () => {
             </tbody>
           </table>
           <div className="mt-5">
-            <button onClick={handlePlaceOder} disabled={carts?.length===0} className="btn btn-primary btn-block">Checkout</button>
+            <button
+              onClick={handlePlaceOder}
+              disabled={carts?.length === 0}
+              className="btn btn-primary btn-block"
+            >
+              Checkout
+            </button>
           </div>
         </div>
       </div>

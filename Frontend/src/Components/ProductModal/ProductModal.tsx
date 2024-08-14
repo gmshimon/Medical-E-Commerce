@@ -59,6 +59,7 @@ const ProductModal: React.FC<ModalProps> = ({
       quantity: 1
     }
     dispatch(addItems(productInfo))
+    onClose()
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">

@@ -30,7 +30,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
   const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
-    dispatch(getAllProduct())
+    dispatch(getAllProduct());
     if (CategoryName) {
       const filteredProducts = products.filter((product) =>
         product.categories.includes(CategoryName)
@@ -40,15 +40,20 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
       setProducts(products);
     }
   }, [CategoryName]);
-  // if (isCartItemAdded) {
-  //   toast.success("Item Added!", {
-  //     position: "top-right",
-  //   });
-  //   dispatch(reset());
-  // }
+  useEffect(() => {
+    if(!isModalOpen){
+      if (isCartItemAdded ) {
+        console.log('ITem Added');
+        toast.success("Item Added!");
+        dispatch(reset());
+      }
+    }
+    
+  }, [isCartItemAdded, isModalOpen]);
+
   return (
     <div>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer position="top-right" />
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
         {productsData.map((item) => (
@@ -59,7 +64,8 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
             <figure>
               {/* TODO: use product image */}
               <img
-                src="https://images.aeonmedia.co/images/afef287f-dd6f-4a6a-b8a6-4f0a09330657/sized-kendal-l4ikccachoc-unsplash.jpg?width=3840&quality=75&format=auto"
+                src={item?.photos[0]}
+                className="w-[384px] h-[281px] border-2 rounded-xl"
                 alt={item.name}
               />
             </figure>

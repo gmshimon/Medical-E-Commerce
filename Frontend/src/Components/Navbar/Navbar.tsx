@@ -5,33 +5,39 @@ import React, { useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { RootState } from "../../lib/store";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
   const { id } = useSelector((state: RootState) => state.category);
   const { productID } = useSelector((state: RootState) => state.product);
-  const {user}=useSelector((state:RootState)=>state.user)
-  const pathname = usePathname()
+  const { user } = useSelector((state: RootState) => state.user);
+  const pathname = usePathname();
   const navOptions = (
     <>
       <li>
         <Link href="/product">Product</Link>
       </li>
-      {user?.role ==='admin' &&
+      {user?.role === "admin" && (
         <li>
-        <Link href="/admin">Admin</Link>
-      </li>
-      }
+          <Link href="/admin">Admin</Link>
+        </li>
+      )}
       <li>
         <Link href="/login">Login</Link>
       </li>
     </>
   );
-  useEffect(()=>{
-
-  },[pathname])
-  if(pathname==="/admin" || pathname==="/admin/add-product" || pathname==='/admin/category' || pathname===`/admin/edit-category/${id}` || pathname==='/admin/manage-product' || pathname===`/admin/edit-product/${productID}` )return null
+  useEffect(() => {}, [pathname]);
+  if (
+    pathname === "/admin" ||
+    pathname === "/admin/add-product" ||
+    pathname === "/admin/category" ||
+    pathname === `/admin/edit-category/${id}` ||
+    pathname === "/admin/manage-product" ||
+    pathname === `/admin/edit-product/${productID}`
+  )
+    return null;
   return (
     <div className="navbar max-w-screen-xl relative z-50 bg-opacity-30 bg-amber-950 text-white">
       <div className="navbar-start">
@@ -101,40 +107,42 @@ const Navbar = () => {
                 {carts.reduce((acc, curr) => acc + curr.totalPrice, 0)}
               </span>
               <div className="card-actions">
-              <Link className="w-full" href="/cart">
-                <button className="btn btn-primary btn-block">
-                  View cart
-                </button>
+                <Link className="w-full" href="/cart">
+                  <button className="btn btn-primary btn-block">
+                    View cart
+                  </button>
                 </Link>
               </div>
             </div>
           </div>
         </div>
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              {/* <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              /> */}
-              <img src={user?.photo} alt="" />
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img src={user?.photo} alt="" />
+              </div>
             </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content  bg-amber-500 text-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <Link href="/profile">Profile</Link>
+                <Link href="/profile">My Order</Link>
+                <Link href="/profile">Logout</Link>
+              </li>
+            </ul>
           </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content  bg-amber-500 text-white rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <Link href="/profile">Profile</Link>
-              <Link href="/profile">My Order</Link>
-              <Link href="/profile">Logout</Link>
-            </li>
-          </ul>
-        </div>
+        ) : (
+          <li>
+            <Link href="/login">Login</Link>
+          </li>
+        )}
         {/* </div> */}
       </div>
     </div>
