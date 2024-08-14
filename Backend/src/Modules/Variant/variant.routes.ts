@@ -1,11 +1,12 @@
 import express from 'express';
 import variantController from './variant.controller';
+import verifyAdminToken from '../../middleware/Token/verifyAdmin';
 
 const router = express.Router();
 
-router.put('/:id',variantController.updateVariant);
-router.delete('/:id',variantController.deleteVariant);
-router.post('/create-variant',variantController.createVariant)
+router.put('/update-variant/:id',verifyAdminToken,variantController.updateVariant);
+router.delete('/delete-variant/:id',verifyAdminToken,variantController.deleteVariant);
+router.post('/create-variant',verifyAdminToken,variantController.createVariant)
 router.get('/',variantController.getAllVariants)
 
 export default router;

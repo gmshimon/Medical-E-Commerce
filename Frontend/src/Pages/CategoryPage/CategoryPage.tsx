@@ -9,18 +9,23 @@ import {
   setCategoryId,
 } from "@/lib/features/categorySlice";
 import { RootState } from "@/lib/store";
-import { redirect } from 'next/navigation'
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaUsers, FaUtensils } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import { TbCategory } from "react-icons/tb";
 const CategoryPage = () => {
-  const { categories, isCategoryCreateSuccess, isCategoryCreateError ,isCategoryDeleteError,isCategoryDeleteSuccess } =
-    useSelector((state: RootState) => state.category);
+  const {
+    categories,
+    isCategoryCreateSuccess,
+    isCategoryCreateError,
+    isCategoryDeleteError,
+    isCategoryDeleteSuccess,
+  } = useSelector((state: RootState) => state.category);
   const [name, setName] = useState<String>("");
   const [slug, setSlug] = useState<String>("");
   const [file, setFile] = useState<File | null>(null);
@@ -43,15 +48,20 @@ const CategoryPage = () => {
       toast.error("Something went wrong");
       dispatch(reset());
     }
-    if(isCategoryDeleteSuccess){
-        toast.success("Deleted Successfully!");
+    if (isCategoryDeleteSuccess) {
+      toast.success("Deleted Successfully!");
       dispatch(reset());
     }
-    if(isCategoryDeleteError){
-        toast.error("Delete unsuccessful!");
+    if (isCategoryDeleteError) {
+      toast.error("Delete unsuccessful!");
       dispatch(reset());
     }
-  }, [isCategoryCreateSuccess, isCategoryCreateError,isCategoryDeleteError,isCategoryDeleteSuccess ]);
+  }, [
+    isCategoryCreateSuccess,
+    isCategoryCreateError,
+    isCategoryDeleteError,
+    isCategoryDeleteSuccess,
+  ]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -71,12 +81,12 @@ const CategoryPage = () => {
     };
     dispatch(createCategory(categoryData));
   };
-const handleCategoryEdit = (id:any)=>{
-    dispatch(setCategoryId(id))
-}
-const handleDeleteCategory = (id:any)=>{
-    dispatch(deleteCategory(id))
-}
+  const handleCategoryEdit = (id: any) => {
+    dispatch(setCategoryId(id));
+  };
+  const handleDeleteCategory = (id: any) => {
+    dispatch(deleteCategory(id));
+  };
   return (
     <section>
       <ToastContainer position="top-right" />
@@ -123,7 +133,7 @@ const handleDeleteCategory = (id:any)=>{
             </div>
             <div className="mt-4">
               <button className="btn btn-active btn-warning text-white">
-                Add Category <FaUtensils />
+                Add Category <TbCategory />
               </button>
             </div>
           </form>
@@ -146,18 +156,18 @@ const handleDeleteCategory = (id:any)=>{
             <tbody>
               {cartItems.map((item, index) => (
                 <tr key={item?._id}>
-                  <th>{indexOfFirstItem+index + 1}</th>
+                  <th>{indexOfFirstItem + index + 1}</th>
                   <td>{item?.name}</td>
                   <td>{item?.slug}</td>
                   <td>
                     <Link href={`/admin/edit-category/${item._id}`}>
-                    <button
-                    onClick={()=>handleCategoryEdit(item._id)}
-                      //   disabled={item?.role === 'admin'}
-                      className="btn btn-warning"
-                    >
-                      <FaEdit />
-                    </button>
+                      <button
+                        onClick={() => handleCategoryEdit(item._id)}
+                        //   disabled={item?.role === 'admin'}
+                        className="btn btn-warning"
+                      >
+                        <FaEdit />
+                      </button>
                     </Link>
                   </td>
                   <th>

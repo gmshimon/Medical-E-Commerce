@@ -197,7 +197,7 @@ export const orderSlice = createSlice({
         state.isDeleteOrderSuccess= true;
         state.isDeleteOrderPending= false;
         state.isDeleteOrderError= false;
-        const result: [] = state.orders.filter(
+        const result: never[] |undefined = state?.orders?.filter(
           item => item._id !== action.payload
         )
         state.orders = result

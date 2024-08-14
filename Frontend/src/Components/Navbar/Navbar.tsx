@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
   const { id } = useSelector((state: RootState) => state.category);
+  const { variantID } = useSelector((state: RootState) => state.variant);
   const { productID } = useSelector((state: RootState) => state.product);
   const { user } = useSelector((state: RootState) => state.user);
   const pathname = usePathname();
@@ -36,7 +37,9 @@ const Navbar = () => {
     pathname === `/admin/edit-category/${id}` ||
     pathname === "/admin/manage-product" ||
     pathname === `/admin/edit-product/${productID}` ||
-    pathname === "/admin/manage-order"
+    pathname === `/admin/manage-variant/${variantID}` ||
+    pathname === "/admin/manage-order" ||
+    pathname === "/admin/manage-variant"
   )
     return null;
   return (

@@ -33,9 +33,15 @@ const page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (isCategoryUpdateSuccess) {
       toast.success("Updated category Successfully");
+      setName("")
+      setSlug("")
       dispatch(reset());
     }
-  }, [isCategoryUpdateSuccess]);
+    if(isCategoryUpdateError){
+      toast.error("Update went wrong");
+      dispatch(reset());
+    }
+  }, [isCategoryUpdateSuccess,isCategoryUpdateError]);
 
   const handleEditCategory = (e: any) => {
     e.preventDefault();

@@ -132,11 +132,10 @@ const OrdersTable = ({ orders }) => {
                   </th>
                 )}
                 {pathname === "/my-order" &&
-                  (item?.status === "cancelled" ? (
-                    <th>Cancelled</th>
-                  ) : (
+                   (
                     <th>
                       <button
+                      disabled={item?.status !=='pending'}
                         onClick={() =>
                           dispatch(
                             changeStatus({ id: item._id, status: "cancelled" })
@@ -147,7 +146,7 @@ const OrdersTable = ({ orders }) => {
                         Cancel
                       </button>
                     </th>
-                  ))}
+                  )}
               </tr>
             ))}
           </tbody>
