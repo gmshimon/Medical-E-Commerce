@@ -20,12 +20,14 @@ import otpRouter from './Modules/OTP/otp.routes'
 import categoryRouter from './Modules/Category/category.routes'
 import productRouter from './Modules/Product/product.routes'
 import variantRouter from './Modules/Variant/variant.routes'
+import orderRouter from './Modules/Order/order.routes'
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/otp', otpRouter)
 app.use('/api/v1/category', categoryRouter)
 app.use('/api/v1/product', productRouter)
 app.use('/api/v1/variant', variantRouter)
+app.use('/api/v1/order', orderRouter)
 
 app.get('/images/users/:filename', (req, res) => {
   const { filename } = req.params

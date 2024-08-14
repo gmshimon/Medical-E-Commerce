@@ -17,7 +17,7 @@ const generateToken = (userInfo:IUser) =>{
         const accessToken = jwt.sign(
             payload,
             process.env.TOKEN_SECRET as string,
-            { expiresIn: '1h' }
+            { expiresIn: '5h' }
         )
         const refreshToken = jwt.sign(
             payload,

@@ -134,7 +134,7 @@ const Navbar = () => {
             >
               <li>
                 <Link href="/profile">Profile</Link>
-                <Link href="/profile">My Order</Link>
+                <Link href="/my-order">My Order</Link>
                 <Link href="/profile">Logout</Link>
               </li>
             </ul>

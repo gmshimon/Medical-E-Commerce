@@ -66,6 +66,16 @@ export const getAllOrders = createAsyncThunk('getAllOrders', async () => {
   return response.data.data
 })
 
+export const getMyOrders =  createAsyncThunk('getMyOrders', async () => {
+  const token = JSON.parse(localStorage.getItem('userToken'))
+  const response = await axiosInstance.get('/order/my-order', {
+    headers: {
+      authorization: `Bearer ${token.accessToken}`
+    }
+  })
+  return response.data.data
+})
+
 export const deleteOrder = createAsyncThunk('deleteOrder',async id=>{
   const token = JSON.parse(localStorage.getItem('userToken'))
   const response = await axiosInstance.delete(`/order/delete-order/${id}`,{
@@ -158,6 +168,22 @@ export const orderSlice = createSlice({
         state.orders = action.payload;
       })
       .addCase(getAllOrders.rejected, (state, action) => {
+        state.isGetOrderPending= false;
+        state.isGetOrderSuccess= false;
+        state.isGetOrderError= true;
+      })
+      .addCase(getMyOrders.pending, (state, action) => {
+        state.isGetOrderPending= true;
+        state.isGetOrderSuccess= false;
+        state.isGetOrderError= false;
+      })
+      .addCase(getMyOrders.fulfilled, (state, action) => {
+        state.isGetOrderPending= false;
+        state.isGetOrderSuccess= true;
+        state.isGetOrderError= false;
+        state.orders = action.payload;
+      })
+      .addCase(getMyOrders.rejected, (state, action) => {
         state.isGetOrderPending= false;
         state.isGetOrderSuccess= false;
         state.isGetOrderError= true;
