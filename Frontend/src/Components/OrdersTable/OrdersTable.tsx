@@ -12,7 +12,7 @@ const OrdersTable = ({ orders }) => {
   const pathname = usePathname();
 
   const itemsPerPage = 5; // Number of items to show per page
-  const totalPages = Math.ceil(orders.length / itemsPerPage); // Calculate total pages
+  const totalPages = Math.ceil(orders?.length / itemsPerPage); // Calculate total pages
   const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -20,7 +20,7 @@ const OrdersTable = ({ orders }) => {
   //calculating the page in the pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const cartItems = orders.slice(indexOfFirstItem, indexOfLastItem);
+  const cartItems = orders?.slice(indexOfFirstItem, indexOfLastItem);
   return (
     <section className="mb-5">
       <div className="overflow-x-auto pl-10 mt-5 h-[500px] lg:h-[450px] ">

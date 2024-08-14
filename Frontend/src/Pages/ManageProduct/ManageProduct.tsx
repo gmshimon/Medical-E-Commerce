@@ -1,4 +1,5 @@
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import Pagination from "@/Components/Pagination/Pagination";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import {
@@ -9,7 +10,8 @@ import {
 } from "@/lib/features/productSlice";
 import { RootState } from "@/lib/store";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,10 +21,32 @@ import "react-toastify/dist/ReactToastify.css";
 const ManageProduct = () => {
   const { products, isProductDeleteError, isProductDeleteSuccess } =
     useSelector((state: RootState) => state.product);
+    const { user } = useSelector((state: RootState) => state.user);
   const itemsPerPage = 5; // Number of items to show per page
-  const totalPages = Math.ceil(products.length / itemsPerPage); // Calculate total pages
+  const totalPages = Math.ceil(products?.length / itemsPerPage); // Calculate total pages
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    if (user?.role !== "admin") {
+      redirect("/");
+    }
+  }, []);
+
+  //check the token and user
+  const checkTokenExpiration = CheckToken();
+  useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    if (user?.role === "admin") {
+      checkTokenExpiration();
+      const tokenExpirationInterval = setInterval(
+        checkTokenExpiration,
+        1 * 1000
+      );
+      return () => clearInterval(tokenExpirationInterval);
+    }
+    // Clean up the interval on component unmount
+  }, []);
 
   useEffect(() => {
     dispatch(getAllProduct());
@@ -49,7 +73,7 @@ const ManageProduct = () => {
   //calculating the page in the pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const cartItems = products.slice(indexOfFirstItem, indexOfLastItem);
+  const cartItems = products?.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <section className="mb-5">

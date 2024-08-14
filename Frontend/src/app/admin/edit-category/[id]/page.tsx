@@ -1,4 +1,5 @@
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import {
   reset,
@@ -6,7 +7,8 @@ import {
   updateCategoryImage,
 } from "@/lib/features/categorySlice";
 import { RootState } from "@/lib/store";
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -15,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 const page = ({ params }: { params: { id: string } }) => {
   const { categories, isCategoryUpdateSuccess, isCategoryUpdateError } =
     useSelector((state: RootState) => state.category);
+    const { user } = useSelector((state: RootState) => state.user);
   const [category, setCategory] = useState<Object | undefined>({});
   const [name, setName] = useState<String>("");
   const [slug, setSlug] = useState<String>("");
@@ -61,6 +64,27 @@ const page = ({ params }: { params: { id: string } }) => {
     dispatch(updateCategory(categoryData));
     console.log(categoryData);
   };
+
+  useLayoutEffect(() => {
+    if (user?.role !== "admin") {
+      redirect("/");
+    }
+  }, []);
+
+  //check the token and user
+  const checkTokenExpiration = CheckToken();
+  useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    if (user?.role === "admin") {
+      checkTokenExpiration();
+      const tokenExpirationInterval = setInterval(
+        checkTokenExpiration,
+        1 * 1000
+      );
+      return () => clearInterval(tokenExpirationInterval);
+    }
+    // Clean up the interval on component unmount
+  }, []);
   return (
     <section>
       <ToastContainer position="top-right" />

@@ -1,11 +1,13 @@
 "use client";
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import Pagination from "@/Components/Pagination/Pagination";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import { addVariant, deleteVariant, getAllVariants, reset, setVariantID } from "@/lib/features/variantSlice";
 import { RootState } from "@/lib/store";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete, MdOutlineAddBusiness } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,10 +16,33 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ManageVariant = () => {
   const { variants,isCreateVariantError,isCreateVariantSuccess,isDeleteVariantSuccess,isDeleteVariantError } = useSelector((state: RootState) => state.variant);
+  const { user } = useSelector((state: RootState) => state.user);
   const [name, setName] = useState<String|any>("");
   const [price, setPrice] = useState<String|any>("");
 
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    if (user?.role !== "admin") {
+      redirect("/");
+    }
+  }, []);
+
+  //check the token and user
+  const checkTokenExpiration = CheckToken();
+  useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    if (user?.role === "admin") {
+      checkTokenExpiration();
+      const tokenExpirationInterval = setInterval(
+        checkTokenExpiration,
+        1 * 1000
+      );
+      return () => clearInterval(tokenExpirationInterval);
+    }
+    // Clean up the interval on component unmount
+  }, []);
+
   useEffect(() => {
     dispatch(getAllVariants());
   }, []);

@@ -1,8 +1,14 @@
 "use client";
+import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
-import { createProduct, reset, updateProduct } from "@/lib/features/productSlice";
+import {
+  createProduct,
+  reset,
+  updateProduct,
+} from "@/lib/features/productSlice";
 import { RootState } from "@/lib/store";
-import { ChangeEvent, useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,6 +24,7 @@ const page = ({ params }: { params: { id: string } }) => {
   const { categories } = useSelector((state: RootState) => state.category);
   const { variants } = useSelector((state: RootState) => state.variant);
   const { products } = useSelector((state: RootState) => state.product);
+  const { user } = useSelector((state: RootState) => state.user);
   const { isProductUpdateError, isProductUpdateSuccess } = useSelector(
     (state: RootState) => state.product
   );
@@ -49,30 +56,30 @@ const page = ({ params }: { params: { id: string } }) => {
     setDiscount(result?.discount);
     setCategory(result?.categories);
     setVariants(result?.variants);
-    const arr =[]
-    result.variants.map(v=>{
-        const data= {
-            name: v.name,
-            price: v.price,
-        }
-        arr.push(data)
-    })
-    setVariants(arr)
+    const arr = [];
+    result.variants.map((v) => {
+      const data = {
+        name: v.name,
+        price: v.price,
+      };
+      arr.push(data);
+    });
+    setVariants(arr);
     setPhotos(result?.photos);
     setStock(result?.stockStatus);
     setStatus(result?.status);
   }, []);
 
-  useEffect(()=>{
-    if(isProductUpdateSuccess){
-        toast.success('Updated Succesfully')
-        dispatch(reset())
+  useEffect(() => {
+    if (isProductUpdateSuccess) {
+      toast.success("Updated Succesfully");
+      dispatch(reset());
     }
-    if(isProductUpdateError){
-        toast.error('Update went wrong')
-        dispatch(reset())
+    if (isProductUpdateError) {
+      toast.error("Update went wrong");
+      dispatch(reset());
     }
-  },[isProductUpdateSuccess,isProductUpdateError])
+  }, [isProductUpdateSuccess, isProductUpdateError]);
   const handleVariantChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedOptions = Array.from(event.target.selectedOptions, (option) =>
       JSON.parse(option.value)
@@ -86,20 +93,40 @@ const page = ({ params }: { params: { id: string } }) => {
   ): VoidFunction => {
     event.preventDefault();
     const data = {
-        name:name,
-        slug:slug,
-        description:description,
-        metaKey:metaKey,
-        price:price,
-        discount:discount,
-        categories:category,
-        variants:variant,
-        stockStatus: stock,
-        status: status,
+      name: name,
+      slug: slug,
+      description: description,
+      metaKey: metaKey,
+      price: price,
+      discount: discount,
+      categories: category,
+      variants: variant,
+      stockStatus: stock,
+      status: status,
+    };
+    dispatch(updateProduct({ id: params.id, data }));
+  };
+
+  useLayoutEffect(() => {
+    if (user?.role !== "admin") {
+      redirect("/");
     }
-    dispatch(updateProduct({id: params.id,data}))
-    console.log(data);
-  }; 
+  }, []);
+
+  //check the token and user
+  const checkTokenExpiration = CheckToken();
+  useEffect(() => {
+    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
+    if (user?.role === "admin") {
+      checkTokenExpiration();
+      const tokenExpirationInterval = setInterval(
+        checkTokenExpiration,
+        1 * 1000
+      );
+      return () => clearInterval(tokenExpirationInterval);
+    }
+    // Clean up the interval on component unmount
+  }, []);
   return (
     <section>
       <ToastContainer position="top-right" />
@@ -112,7 +139,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="name">Product Name *</label>
                 <input
-                value={name}
+                  value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                   name="name"
@@ -124,7 +151,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="slug">Slug *</label>
                 <input
-                value={slug}
+                  value={slug}
                   onChange={(e) => setSlug(e.target.value)}
                   required
                   name="slug"
@@ -140,7 +167,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="price">Price *</label>
                 <input
-                value={price}
+                  value={price}
                   onChange={(e) => setPrice(parseFloat(e.target.value))}
                   required
                   name="price"
@@ -152,7 +179,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="discount">Discount *</label>
                 <input
-                value={discount}
+                  value={discount}
                   onChange={(e) => setDiscount(parseFloat(e.target.value))}
                   required
                   name="discount"
@@ -168,7 +195,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="metaKey">Meta Key *</label>
                 <input
-                value={metaKey}
+                  value={metaKey}
                   onChange={(e) => setMeta(e.target.value)}
                   required
                   name="metaKey"
@@ -180,7 +207,7 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="status">Status *</label>
                 <select
-                value={status}
+                  value={status}
                   name="status"
                   className="select select-bordered w-full mt-2"
                   onChange={(e) => setStatus(e.target.value)}
@@ -199,19 +226,22 @@ const page = ({ params }: { params: { id: string } }) => {
               <div className="flex-1">
                 <label htmlFor="category">Category *</label>
                 <select
-                value={category}
+                  value={category}
                   name="category"
                   className="select select-bordered w-full"
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  {categories.map((item) => (
-                    item?.name===category?
-                    <option selected key={item.id} value={item.name}>
-                      {item.name}
-                    </option>:<option key={item.id} value={item.name}>
-                      {item.name}
-                    </option>
-                  ))}
+                  {categories.map((item) =>
+                    item?.name === category ? (
+                      <option selected key={item.id} value={item.name}>
+                        {item.name}
+                      </option>
+                    ) : (
+                      <option key={item.id} value={item.name}>
+                        {item.name}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
               <div className="flex-1 mt-4 md:mt-0">
@@ -220,18 +250,18 @@ const page = ({ params }: { params: { id: string } }) => {
                   name="variant"
                   multiple
                   className="select select-bordered w-full"
-                  value={variant?.map(item => JSON.stringify(item))}
+                  value={variant?.map((item) => JSON.stringify(item))}
                   onChange={handleVariantChange}
                 >
                   <option disabled value="">
                     Select Variant
                   </option>
-                
-                  {variants?.map((item) => 
-                   <option key={item.name} value={JSON.stringify(item)}>
+
+                  {variants?.map((item) => (
+                    <option key={item.name} value={JSON.stringify(item)}>
                       {item.name} (${item.price})
                     </option>
-                  )}
+                  ))}
                 </select>
               </div>
             </div>
@@ -240,7 +270,7 @@ const page = ({ params }: { params: { id: string } }) => {
             <div className="mt-4">
               <label htmlFor="description">Description *</label>
               <textarea
-              value={description}
+                value={description}
                 onChange={(e) => setDes(e.target.value)}
                 required
                 name="description"
@@ -266,11 +296,9 @@ const page = ({ params }: { params: { id: string } }) => {
 
             {/* File Upload */}
             <div className="mt-4 flex">
-              {
-                photos?.map(v=>
-                    <img className="h-[50px] w-[60px] ml-5" src={v}/>
-                )
-              }
+              {photos?.map((v) => (
+                <img className="h-[50px] w-[60px] ml-5" src={v} />
+              ))}
             </div>
 
             {/* Submit Button */}

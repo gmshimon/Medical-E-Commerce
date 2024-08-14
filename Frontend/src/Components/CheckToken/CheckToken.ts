@@ -1,16 +1,17 @@
 'use client'
 import { setUserNull } from '@/lib/features/userSlice';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 const CheckToken = () => {
     const dispatch = useDispatch()
     const router = useRouter();
+    const pathname = usePathname()
+
     const checkTokenExpiration = () => {
       const storedToken = localStorage.getItem("userToken");
       if (storedToken) {
-        console.log("token checking");
         const { tokenExpiration } = JSON.parse(storedToken);
         const currentTime = new Date().getTime(); //get the current time 
         if (currentTime > tokenExpiration) { // check the time with the token expiration
