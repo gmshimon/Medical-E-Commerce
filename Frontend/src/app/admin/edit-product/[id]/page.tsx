@@ -3,6 +3,7 @@ import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import {
   createProduct,
+  getAllProduct,
   reset,
   updateProduct,
 } from "@/lib/features/productSlice";
@@ -10,6 +11,7 @@ import { RootState } from "@/lib/store";
 import { redirect } from "next/navigation";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -73,6 +75,7 @@ const page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     if (isProductUpdateSuccess) {
       toast.success("Updated Succesfully");
+      dispatch(getAllProduct());
       dispatch(reset());
     }
     if (isProductUpdateError) {
@@ -304,7 +307,7 @@ const page = ({ params }: { params: { id: string } }) => {
             {/* Submit Button */}
             <div className="mt-4">
               <button className="btn btn-active btn-warning text-white">
-                Add Item <FaUtensils />
+                Update <MdOutlineProductionQuantityLimits />
               </button>
             </div>
           </form>

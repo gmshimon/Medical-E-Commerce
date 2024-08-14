@@ -7,7 +7,6 @@ import ProductModal from "../ProductModal/ProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { reset } from "@/lib/features/cartSlice";
-import { getAllProduct } from "@/lib/features/productSlice";
 
 // Define the type for props
 interface ProductsProps {
@@ -30,7 +29,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
   const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
-    dispatch(getAllProduct());
+    console.log(products)
     if (CategoryName) {
       const filteredProducts = products.filter((product) =>
         product.categories.includes(CategoryName)
@@ -56,7 +55,7 @@ const Products: React.FC<ProductsProps> = ({ CategoryName }) => {
       <ToastContainer position="top-right" />
       {/* <h2 className="text-2xl font-bold text-center mb-4">{CategoryName}</h2> */}
       <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-10">
-        {productsData.map((item) => (
+        {productsData?.map((item) => (
           <div
             key={item.name}
             className="card card-compact bg-base-100 w-96 shadow-xl relative"

@@ -8,6 +8,7 @@ import Products from "@/Components/Products/Products";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "@/lib/features/categorySlice";
 import { RootState } from "@/lib/store";
+import { getAllProduct } from "@/lib/features/productSlice";
 
 const ProductPage = () => {
   const {categories} = useSelector((state:RootState)=>state.category)
@@ -18,6 +19,7 @@ const ProductPage = () => {
     // fetch("categories.json")
     //   .then((res) => res.json())
     //   .then((data) => setCategories(data));
+    dispatch(getAllProduct());
     dispatch(getAllCategories())
   }, []);
 
