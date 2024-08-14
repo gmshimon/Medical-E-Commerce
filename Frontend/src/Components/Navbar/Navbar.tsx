@@ -35,7 +35,8 @@ const Navbar = () => {
     pathname === "/admin/category" ||
     pathname === `/admin/edit-category/${id}` ||
     pathname === "/admin/manage-product" ||
-    pathname === `/admin/edit-product/${productID}`
+    pathname === `/admin/edit-product/${productID}` ||
+    pathname === "/admin/manage-order"
   )
     return null;
   return (

@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             </li>
             <li>
-              <Link href="/dashboard/my-review">
+              <Link href="/admin/manage-order">
                 <MdOutlineRateReview />
                 Manage Order
               </Link>

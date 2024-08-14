@@ -33,7 +33,7 @@ const AdminHome = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((item, index) => (
+              {users?.map((item, index) => (
                 <tr key={item?._id}>
                   <th>{index + 1}</th>
                   <td>{item?.name}</td>
