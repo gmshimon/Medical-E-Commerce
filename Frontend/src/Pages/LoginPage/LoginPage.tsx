@@ -11,7 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
-  const {isLoginSuccess,isLoginError}=useSelector((state:RootState)=>state.user)
+  const {isLoginSuccess,isLoginError,errorMessage}=useSelector((state:RootState)=>state.user)
   const [email, setEmail] = useState<string>("");
   const [pass, setPassword] = useState<string>("");
 
@@ -23,7 +23,7 @@ const LoginPage = () => {
       redirect('/')
     }
     if(isLoginError){
-      toast.error("Invalid email or password");
+      toast.error(errorMessage);
       dispatch(reset())
     }
   },[isLoginSuccess,isLoginError])

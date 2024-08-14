@@ -71,7 +71,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
       })
     }
     if (!user?.verified) {
-      return res.status(404).json({
+      return res.status(403).json({
         status: 'Fail',
         message: 'User Not verified'
       })
@@ -80,7 +80,7 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!isPasswordValid) {
       return res.status(403).json({
         status: 'Fail',
-        message: 'Wrong password'
+        message: 'Wrong Credentials'
       })
     }
     const { accessToken, refreshToken } = generateToken(user)

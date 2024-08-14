@@ -2,13 +2,14 @@ import { NextFunction, Request, Response } from 'express'
 import User from '../Users/user.model'
 import { IUser } from '../Users/user.interface'
 import Otp from './otp.model'
+import sendOTPEmail from '../../utilis/sendOTP'
 
 const verifyOTP = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body
     const userData: IUser | null = await User.findOne({ email: data.email })
     if (userData?.verified) {
-        const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
+      const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
       return res.status(200).json({
         status: 'Failed',
         message: 'User already  verified'
@@ -26,7 +27,7 @@ const verifyOTP = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).json({ message: 'OTP has expired.' })
     } else {
       // Handle the case where the OTP is valid and the user is not verified
-      if (parseInt(data.otp,10) === parseInt( otpdata?.otp,10)) {
+      if (parseInt(data.otp, 10) === parseInt(otpdata?.otp, 10)) {
         //update the user verified
         const updateUser = await User.updateOne(
           { _id: userData?._id },
@@ -37,41 +38,46 @@ const verifyOTP = async (req: Request, res: Response, next: NextFunction) => {
           }
         )
         const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
-        return res.status(200).json({ status: 'success', message: 'User Verified' })
+        return res
+          .status(200)
+          .json({ status: 'success', message: 'User Verified' })
       } else {
         const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
-        res.status(200).json({ status: 'failed', message: 'Wrong OTP, Request new otp' })
+        res
+          .status(200)
+          .json({ status: 'failed', message: 'Wrong OTP, Request new otp' })
       }
     }
   } catch (error) {
     res.status(400).json({
-        status:'Fail',
-        message:error
+      status: 'Fail',
+      message: error
     })
   }
 }
 
-const regenerateOTP = async (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const data = req.body
-        const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
-        if(deleteOtp.deletedCount ===1){
-            const generateOTP = Math.floor(1000 + Math.random() * 9000)
-            const result = await Otp.create({
-                userEmail: data.email,
-                otp:generateOTP
-            })
-            return res.status(200).json({
-                status:'success',
-                message:"New OTP generated",
-            })
-        }
-    }catch(error){
-        res.status(400).json({
-            status:'Fail',
-            message:error
-        })
+const regenerateOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = req.body
+    const deleteOtp = await Otp.deleteOne({ userEmail: data.email })
+    if (deleteOtp.deletedCount === 1) {
+      const generateOTP = Math.floor(1000 + Math.random() * 9000)
+      sendOTPEmail(data.email )
+      return res.status(200).json({
+        status: 'success',
+        message: 'New OTP generated'
+      })
     }
+  } catch (error) {
+    res.status(400).json({
+      status: 'Fail',
+      message: error
+    })
+  }
 }
 
-export default { verifyOTP ,regenerateOTP}
+export default { verifyOTP, regenerateOTP }

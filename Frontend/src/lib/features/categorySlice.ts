@@ -39,9 +39,11 @@ const initialState: categoryInterface = {
 }
 
 export const createCategory = createAsyncThunk('createCategory', async data => {
+  const token = JSON.parse(localStorage.getItem('userToken'))
   const response = await axiosInstance.post('/category', data, {
     headers: {
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'multipart/form-data',
+       authorization: `Bearer ${token.accessToken}`
     }
   })
   return response.data.data
@@ -58,12 +60,14 @@ export const getAllCategories = createAsyncThunk(
 export const updateCategoryImage = createAsyncThunk(
   'updateCategoryImage',
   async data => {
+    const token = JSON.parse(localStorage.getItem('userToken'))
     const response = await axiosInstance.put(
       '/category/update-category-image',
       data,
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          authorization: `Bearer ${token.accessToken}`
         }
       }
     )
@@ -72,16 +76,26 @@ export const updateCategoryImage = createAsyncThunk(
 export const updateCategory = createAsyncThunk(
   'updateCategory',
   async data => {
+    const token = JSON.parse(localStorage.getItem('userToken'))
     const response = await axiosInstance.put(
       '/category/update-category',
-      data
+      data,{
+        headers: {
+          authorization: `Bearer ${JSON.parse(localStorage.getItem('userToken')).accessToken}`
+        }
+      }
     )
     return response.data
   }
 )
 
 export const deleteCategory = createAsyncThunk('deleteCategory', async id => {
-  const response = await axiosInstance.delete(`/category/delete-category/${id}`)
+  const token = JSON.parse(localStorage.getItem('userToken'))
+  const response = await axiosInstance.delete(`/category/delete-category/${id}`,{
+    headers: {
+      authorization: `Bearer ${token.accessToken}`
+    }
+  })
   return id
 })
 

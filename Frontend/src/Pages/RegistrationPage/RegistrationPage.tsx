@@ -43,9 +43,9 @@ const RegistrationPage = () => {
       password,
       image:file
     };
+    // openModal();
     dispatch(registerUser(formData));
 
-    console.log(formData);
   }
 
   return (

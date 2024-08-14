@@ -16,7 +16,6 @@ let transporter = nodemailer.createTransport({
   })
 
   const sendOTPEmail = async(email:string) => {
-    console.log(email)
     const generateOTP = Math.floor(1000 + Math.random() * 9000)
     const mailOptions = {
         from:"simonrosedale059@gmail.com",

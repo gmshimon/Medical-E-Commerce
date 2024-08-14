@@ -114,7 +114,6 @@ const updateCategory = async (
 ) => {
   try {
     const data = req.body
-    console.log(data);
     const updateCategory = await Category.updateOne(
       { _id: data.id },
       {

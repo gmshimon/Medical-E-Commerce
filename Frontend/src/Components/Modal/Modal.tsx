@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../lib/store';
-import { verifyOTP } from "@/lib/features/userSlice";
+import { regenerateOTP, verifyOTP } from "@/lib/features/userSlice";
 
 interface ModalProps {
   isOpen: boolean;
@@ -24,9 +24,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     }
   }, [isOpen]);
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
-  const [timeLeft, setTimeLeft] = useState<number>(59); // Countdown timer starting at 59 seconds
+  const [timeLeft, setTimeLeft] = useState<number>(59); // Countdown timer starting at 5 seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
-  
+  const [OtpRegen,setOtpRegen] = useState<boolean>(false)
+
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
 
@@ -61,12 +62,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       }
     }
   };
-  const handleRequestNewOtp = () => {
-    // onRequestNewOtp();
-    // Reset timer
-    setTimeLeft(59);
-    setTimerActive(true);
-  };
+
   const {email} = useSelector((state: RootState)=>state.user)
   const dispatch = useDispatch()
   const handleSubmit = (event: FormEvent) => {
@@ -77,6 +73,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     }
     dispatch(verifyOTP(otpData));
     onClose()
+  };
+  const handleRequestNewOtp = () => {
+    // onRequestNewOtp();
+    dispatch(regenerateOTP({email:email}))
+    // Reset timer
+    setTimeLeft(59);
+    setOtpRegen(true)
+    setTimerActive(true);
   };
   return ReactDOM.createPortal(
     <dialog id="my_modal_1" className="modal">
@@ -100,6 +104,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           ))}
         </div>
         <div className="mb-4">
+          {
+            OtpRegen&& <p className="text-center my-2 font-bold">New OTP sent to email</p>
+          }
           <p className="text-sm">
             {timerActive
               ? `Resend OTP in ${timeLeft}s`
@@ -109,12 +116,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         {otp.length === 4 && (
           <div className="flex justify-center">
             <div>
-            {/* {!timerActive && (
+            {!timerActive && (
               <button type="button" onClick={handleRequestNewOtp} className="btn w-full mb-3">
                 Request New OTP
               </button>
-            )} */}
+            )}
             <button
+            type="submit"
               onClick={handleSubmit}
               className="btn btn-success text-white w-full"
             >
@@ -125,14 +133,14 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         )}
 
         <div className="modal-action">
-          <form method="dialog">
+          {/* <form method="dialog"> */}
             <button
               onClick={onClose}
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             >
               ✕
             </button>
-          </form>
+          {/* </form> */}
         </div>
       </div>
     </dialog>,

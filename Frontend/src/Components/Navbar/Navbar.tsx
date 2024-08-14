@@ -27,9 +27,6 @@ const Navbar = () => {
           <Link href="/admin">Admin</Link>
         </li>
       )}
-      <li>
-        <Link href="/login">Login</Link>
-      </li>
     </>
   );
   useEffect(() => {}, [pathname]);

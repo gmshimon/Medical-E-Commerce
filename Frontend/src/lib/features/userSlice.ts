@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 export interface CounterState {
   value: number
   email: string | null
+  errorMessage: string | null
   isUserRegisterError: boolean
   isUserRegisterSuccess: boolean
   isUserRegisterLoading: boolean
@@ -23,6 +24,7 @@ export interface CounterState {
 const initialState: CounterState = {
   value: 0,
   email: null,
+  errorMessage:null,
   isUserRegisterError: false,
   isUserRegisterSuccess: false,
   isUserRegisterLoading: false,
@@ -48,22 +50,30 @@ export const registerUser = createAsyncThunk('registerUser', async data => {
   return result
 })
 
-export const loginUser = createAsyncThunk('loginUser', async data => {
-  const response = await axiosInstance.post('/user/login', data)
-  const result = response.data
-  if (result.data) {
-    const tokenExpiration = new Date().getTime() + 5 * 60 * 60 * 1000
-    localStorage.setItem(
-      'userToken',
-      JSON.stringify({
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
-        tokenExpiration: tokenExpiration
-      })
-    )
+export const loginUser = createAsyncThunk(
+  'loginUser',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/user/login', data);
+      const result = response.data;
+      if (result.data) {
+        const tokenExpiration = new Date().getTime() + 5 * 60 * 60 * 1000;
+        localStorage.setItem(
+          'userToken',
+          JSON.stringify({
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken,
+            tokenExpiration: tokenExpiration,
+          })
+        );
+      }
+      return result.data;
+    } catch (error) {
+      // Return a rejected action containing the error message
+      return rejectWithValue(error.response?.data?.message || 'Login failed');
+    }
   }
-  return result.data
-})
+);
 
 export const getAllUsers = createAsyncThunk('getAllUsers',async()=>{
   const token = JSON.parse(localStorage.getItem('userToken'))
@@ -77,6 +87,11 @@ export const getAllUsers = createAsyncThunk('getAllUsers',async()=>{
 
 export const verifyOTP = createAsyncThunk('verifyOTP', async data => {
   const response = await axiosInstance.post('otp/verify-otp', data)
+  return response.data
+})
+
+export const regenerateOTP = createAsyncThunk('regenerateOTP', async data => {
+  const response = await axiosInstance.post('otp/regenerate-otp', data)
   return response.data
 })
 
@@ -156,23 +171,24 @@ export const counterSlice = createSlice({
         state.isLoginError = false
         state.isLoginSuccess = false
       })
-      .addCase(loginUser.fulfilled, (state,action:PayloadAction<number>) => {
+      .addCase(loginUser.fulfilled, (state,action) => {
         state.isLoginPending = false
         state.isLoginError = false
         state.isLoginSuccess = true
         state.user = action.payload
       })
-      .addCase(loginUser.rejected, state => {
+      .addCase(loginUser.rejected, (state,action) => {
         state.isLoginPending = false
         state.isLoginError = true
         state.isLoginSuccess = false
+        state.errorMessage = action.payload;
       })
       .addCase(getAllUsers.pending,state=>{
         state.isGetAllUsersLoading = true
         state.isGetAllUsersError = false
         state.isGetAllUsersSuccess = false
       })
-      .addCase(getAllUsers.fulfilled, (state, action:PayloadAction<number>) => {
+      .addCase(getAllUsers.fulfilled, (state, action) => {
         state.isGetAllUsersLoading = false
         state.isGetAllUsersError = false
         state.isGetAllUsersSuccess = true
