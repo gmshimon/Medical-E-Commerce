@@ -1,5 +1,4 @@
 "use client";
-import CheckToken from "@/Components/CheckToken/CheckToken";
 import Pagination from "@/Components/Pagination/Pagination";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import {
@@ -10,8 +9,7 @@ import {
 } from "@/lib/features/productSlice";
 import { RootState } from "@/lib/store";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,26 +25,7 @@ const ManageProduct = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
 
-  useLayoutEffect(() => {
-    if (user?.role !== "admin") {
-      redirect("/");
-    }
-  }, []);
 
-  //check the token and user
-  const checkTokenExpiration = CheckToken();
-  useEffect(() => {
-    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
-    if (user?.role === "admin") {
-      checkTokenExpiration();
-      const tokenExpirationInterval = setInterval(
-        checkTokenExpiration,
-        1 * 1000
-      );
-      return () => clearInterval(tokenExpirationInterval);
-    }
-    // Clean up the interval on component unmount
-  }, []);
 
   useEffect(() => {
     dispatch(getAllProduct());

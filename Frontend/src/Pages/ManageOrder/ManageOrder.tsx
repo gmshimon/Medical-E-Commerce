@@ -1,11 +1,10 @@
 "use client";
-import CheckToken from "@/Components/CheckToken/CheckToken";
+
 import OrdersTable from "@/Components/OrdersTable/OrdersTable";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import { getAllOrders, reset } from "@/lib/features/orderSlice";
 import { RootState } from "@/lib/store";
-import { redirect } from "next/navigation";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -38,26 +37,7 @@ const ManageOrder = () => {
       dispatch(reset())
     }
   },[isDeleteOrderSuccess,isDeleteOrderError,isUpdateOrderSuccess,isUpdateOrderError])
-  useLayoutEffect(() => {
-    if (user?.role !== "admin") {
-      redirect("/");
-    }
-  }, []);
 
-  //check the token and user
-  const checkTokenExpiration = CheckToken();
-  useEffect(() => {
-    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
-    if (user?.role === "admin") {
-      checkTokenExpiration();
-      const tokenExpirationInterval = setInterval(
-        checkTokenExpiration,
-        1 * 1000
-      );
-      return () => clearInterval(tokenExpirationInterval);
-    }
-    // Clean up the interval on component unmount
-  }, []);
   return (
     <>
     <SectionTitle heading={"Orders"} subHeading={"What's New"} />

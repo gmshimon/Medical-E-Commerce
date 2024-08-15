@@ -1,16 +1,13 @@
 "use client";
-import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import {
-  createProduct,
   getAllProduct,
   reset,
   updateProduct,
 } from "@/lib/features/productSlice";
 import { RootState } from "@/lib/store";
-import { redirect } from "next/navigation";
-import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
-import { FaUtensils } from "react-icons/fa";
+
+import { ChangeEvent, useEffect, useState } from "react";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
@@ -93,7 +90,7 @@ const page = ({ params }: { params: { id: string } }) => {
 
   const handleAddItem = (
     event: ChangeEvent<HTMLSelectElement>
-  ): VoidFunction => {
+  ) => {
     event.preventDefault();
     const data = {
       name: name,
@@ -110,26 +107,6 @@ const page = ({ params }: { params: { id: string } }) => {
     dispatch(updateProduct({ id: params.id, data }));
   };
 
-  useLayoutEffect(() => {
-    if (user?.role !== "admin") {
-      redirect("/");
-    }
-  }, []);
-
-  //check the token and user
-  const checkTokenExpiration = CheckToken();
-  useEffect(() => {
-    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
-    if (user?.role === "admin") {
-      checkTokenExpiration();
-      const tokenExpirationInterval = setInterval(
-        checkTokenExpiration,
-        1 * 1000
-      );
-      return () => clearInterval(tokenExpirationInterval);
-    }
-    // Clean up the interval on component unmount
-  }, []);
   return (
     <section>
       <ToastContainer position="top-right" />

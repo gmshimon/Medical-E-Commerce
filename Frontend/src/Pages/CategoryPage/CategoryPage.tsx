@@ -9,17 +9,14 @@ import {
   setCategoryId,
 } from "@/lib/features/categorySlice";
 import { RootState } from "@/lib/store";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { TbCategory } from "react-icons/tb";
-import { redirect } from "next/navigation";
-import CheckToken from "@/Components/CheckToken/CheckToken";
 const CategoryPage = () => {
   const {
     categories,
@@ -91,26 +88,6 @@ const CategoryPage = () => {
     dispatch(deleteCategory(id));
   };
 
-  useLayoutEffect(() => {
-    if (user?.role !== "admin") {
-      redirect("/");
-    }
-  }, []);
-
-  //check the token and user
-  const checkTokenExpiration = CheckToken();
-  useEffect(() => {
-    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
-    if (user?.role === "admin") {
-      checkTokenExpiration();
-      const tokenExpirationInterval = setInterval(
-        checkTokenExpiration,
-        1 * 1000
-      );
-      return () => clearInterval(tokenExpirationInterval);
-    }
-    // Clean up the interval on component unmount
-  }, []);
   return (
     <section>
       <ToastContainer position="top-right" />

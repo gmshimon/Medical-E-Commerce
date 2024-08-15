@@ -1,11 +1,8 @@
 "use client";
-import CheckToken from "@/Components/CheckToken/CheckToken";
 import SectionTitle from "@/Components/SectionTitle/SectionTitle";
 import { getAllUsers } from "@/lib/features/userSlice";
 import { RootState } from "@/lib/store";
-import { redirect } from "next/navigation";
-import React, { useEffect, useLayoutEffect } from "react";
-import { FaUsers } from "react-icons/fa";
+import React, { useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,27 +10,6 @@ const AdminHome = () => {
   const { carts } = useSelector((state: RootState) => state.cart);
   const { users, user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-
-  useLayoutEffect(() => {
-    if (user?.role !== "admin") {
-      redirect("/");
-    }
-  }, []);
-
-  //check the token and user
-  const checkTokenExpiration = CheckToken();
-  useEffect(() => {
-    // Call checkTokenExpiration every sec (1 * 1000 milliseconds)
-    if (user?.role === "admin") {
-      checkTokenExpiration();
-      const tokenExpirationInterval = setInterval(
-        checkTokenExpiration,
-        1 * 1000
-      );
-      return () => clearInterval(tokenExpirationInterval);
-    }
-    // Clean up the interval on component unmount
-  }, []);
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -43,7 +19,7 @@ const AdminHome = () => {
     <div>
       <SectionTitle heading={"Manage all Users"} subHeading={"How many??"} />
       <div>
-        <div className="overflow-x-auto pl-10">
+        <div className="overflow-x-auto">
           <table className="table">
             {/* head */}
             <thead className="bg-orange-600 text-white text-1xl">
