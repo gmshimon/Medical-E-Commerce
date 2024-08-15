@@ -1,6 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
-import connectDB from './Config/db'
+import connectDB from './src/Config/db'
 import path from 'path'
 import dotenv from 'dotenv'
 
@@ -15,12 +15,12 @@ app.use(express.urlencoded({ extended: true }))
 
 connectDB()
 
-import userRouter from './Modules/Users/user.routes'
-import otpRouter from './Modules/OTP/otp.routes'
-import categoryRouter from './Modules/Category/category.routes'
-import productRouter from './Modules/Product/product.routes'
-import variantRouter from './Modules/Variant/variant.routes'
-import orderRouter from './Modules/Order/order.routes'
+import userRouter from './src/Modules/Users/user.routes'
+import otpRouter from './src/Modules/OTP/otp.routes'
+import categoryRouter from './src/Modules/Category/category.routes'
+import productRouter from './src/Modules/Product/product.routes'
+import variantRouter from './src/Modules/Variant/variant.routes'
+import orderRouter from './src/Modules/Order/order.routes'
 
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/otp', otpRouter)
@@ -48,5 +48,8 @@ app.get('/images/products/:filename', (req, res) => {
 
 app.get('/', async (req: Request, res: Response, nest: NextFunction) => {
   res.send('Hello from Express Server')
+})
+app.listen(8000, () => {
+  console.log(`App is listening on port ${8000}`)
 })
 export default app
