@@ -21,36 +21,18 @@ const Category = () => {
         subHeading={"From 11:00am to 10:00pm"}
       />
       <Swiper
-        slidesPerView={4}
+        slidesPerView={2}
         spaceBetween={30}
         centeredSlides={true}
         pagination={{
           clickable: true,
-        }}
-        breakpoints={{
-          // when window width is >= 640px
-          640: {
-            slidesPerView: 1,
-          },
-          // when window width is >= 768px
-          768: {
-            slidesPerView: 2,
-          },
-          // when window width is >= 1024px
-          1024: {
-            slidesPerView: 3,
-          },
-          // when window width is >= 1280px
-          1280: {
-            slidesPerView: 4,
-          },
         }}
         modules={[Pagination]}
         className="mySwiper py-15"
       >
         {categories.map((category) => (
           <SwiperSlide  key={category.name}>
-            <div className="card bg-base-100 w-full md:w-80 shadow-xl">
+            <div className="card bg-base-100 lg:w-80 shadow-xl">
               <figure>
                 <img src={category?.thumbnail} alt="Shoes" />
               </figure>
