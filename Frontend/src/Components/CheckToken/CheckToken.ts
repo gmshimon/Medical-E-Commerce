@@ -11,7 +11,6 @@ const CheckToken = () => {
 
     const checkTokenExpiration = () => {
       const storedToken = localStorage.getItem("userToken");
-      console.log("token not expired");
       if (storedToken) {
         const { tokenExpiration } = JSON.parse(storedToken);
         const currentTime = new Date().getTime(); //get the current time 
