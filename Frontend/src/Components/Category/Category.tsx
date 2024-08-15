@@ -27,21 +27,37 @@ const Category = () => {
         pagination={{
           clickable: true,
         }}
+        breakpoints={{
+          // when window width is >= 640px
+          640: {
+            slidesPerView: 1,
+          },
+          // when window width is >= 768px
+          768: {
+            slidesPerView: 2,
+          },
+          // when window width is >= 1024px
+          1024: {
+            slidesPerView: 3,
+          },
+          // when window width is >= 1280px
+          1280: {
+            slidesPerView: 4,
+          },
+        }}
         modules={[Pagination]}
         className="mySwiper py-15"
       >
         {categories.map((category) => (
           <SwiperSlide  key={category.name}>
-            <div className="card bg-base-100 w-80 shadow-xl">
+            <div className="card bg-base-100 w-full md:w-80 shadow-xl">
               <figure>
                 <img src={category?.thumbnail} alt="Shoes" />
               </figure>
               <div className="card-body">
                 <h2 className="font-bold">{category.name}</h2>
                 <p>{category?.slug}</p>
-                {/* <div className="card-actions justify-center">
-                  <button className="btn btn-primary">Buy Now</button>
-                </div> */}
+
               </div>
             </div>
           </SwiperSlide>
