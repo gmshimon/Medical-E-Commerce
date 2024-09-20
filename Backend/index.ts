@@ -31,18 +31,18 @@ app.use('/api/v1/order', orderRouter)
 
 app.get('/images/users/:filename', (req, res) => {
   const { filename } = req.params
-  const imagePath = path.join(__dirname, '../images/users', filename)
+  const imagePath = path.join(__dirname, './images/users', filename)
   res.sendFile(imagePath)
 })
 
 app.get('/images/category/:filename', (req, res) => {
   const { filename } = req.params
-  const imagePath = path.join(__dirname, '../images/category', filename)
+  const imagePath = path.join(__dirname, './images/category', filename)
   res.sendFile(imagePath)
 })
 app.get('/images/products/:filename', (req, res) => {
   const { filename } = req.params
-  const imagePath = path.join(__dirname, '../images/products', filename)
+  const imagePath = path.join(__dirname, './images/products', filename)
   res.sendFile(imagePath)
 })
 

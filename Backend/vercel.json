@@ -1,15 +1,44 @@
 {
-  "version":2,
-  "builds":[
+    "version": 2,
+    "builds": [
       {
-          "src":"./index.ts",
-          "use":"@vercel/node"
+        "src": "index.ts",
+        "use": "@vercel/node"
       }
-  ],
-  "routes":[
+    ],
+    "routes": [
       {
-          "src":"/(.*)",
-          "dest":"/index.ts"
+        "src": "/api/v1/user/(.*)",
+        "dest": "/Modules/Users/user.routes.ts"
+      },
+      {
+        "src": "/api/v1/otp/(.*)",
+        "dest": "/Modules/OTP/otp.routes.ts"
+      },
+      {
+        "src": "/api/v1/category/(.*)",
+        "dest": "/Modules/Category/category.routes.ts"
+      },
+      {
+        "src": "/api/v1/product/(.*)",
+        "dest": "/Modules/Product/product.routes.ts"
+      },
+      {
+        "src": "/api/v1/variant/(.*)",
+        "dest": "/Modules/Variant/variant.routes.ts"
+      },
+      {
+        "src": "/api/v1/order/(.*)",
+        "dest": "/Modules/Order/order.routes.ts"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.ts"
       }
-  ]
-}
+    ],
+    "env": {
+      "MONGO_URI": "mongodb+srv://Med_home:GMShimon9696@cluster0.in8lp.mongodb.net/Med_Home?retryWrites=true&w=majority&appName=Cluster0;",
+      "PORT": "5000"
+    }
+  }
+  
