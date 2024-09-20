@@ -5,20 +5,23 @@
 ```bash
 git clone https://github.com/gmshimon/Medical-E-Commerce.git
 ```
-### Start the frontend 
+
+### Start the Backend 
 
 ```bash
-cd Frontend
-```
-
-Then 
-
-```bash
-npm install
+cd Backend
 ```
 
 Then
 
 ```bash
-npm run dev
+npm install
 ```
+
+To start the server
+
+```bash
+npm  start
+```
+
+### NOTE: Please follow the above step to start the app and backend server
